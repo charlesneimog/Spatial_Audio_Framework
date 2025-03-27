@@ -332,7 +332,7 @@ void ambi_roomsim_setRoomDimZ(void* const hAmbi, float newValue)
 void ambi_roomsim_setWallAbsCoeff(void* const hAmbi, int xyz_idx, int posNeg_idx, float new_value)
 {
     ambi_roomsim_data *pData = (ambi_roomsim_data*)(hAmbi);
-    saf_assert(xyz_idx<4, "xyz_idx indicates each spatial axis, so cannot exceed 4");
+    saf_assert(xyz_idx<3, "xyz_idx indicates each spatial axis, so cannot exceed 3");
     saf_assert(posNeg_idx==0 || posNeg_idx==1, "posNeg_idx is a bool");
     if(new_value!=pData->abs_wall[2*xyz_idx+posNeg_idx]){
         pData->abs_wall[2*xyz_idx+posNeg_idx] = new_value;
