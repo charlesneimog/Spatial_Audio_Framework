@@ -996,7 +996,7 @@ void convhull_nd_build
             reldist[i] += pow(absdist[i*d+j], 2.0);
 
     /* Sort from maximum to minimum relative distance */
-    int num_pleft, cnt;
+    int num_pleft;
     int* ind, *pleft;
     ind = (int*)malloc((nVert-d-1) * sizeof(int));
     pleft = (int*)malloc((nVert-d-1) * sizeof(int));
@@ -1011,10 +1011,6 @@ void convhull_nd_build
     /* Loop over all remaining points that are not deleted. Deletion of points
      occurs every #iter2del# iterations of this while loop */
     memset(A, 0, (d+1)*(d+1) * sizeof(CH_FLOAT));
-
-    /* cnt is equal to the points having been selected without deletion of
-     nonvisible points (i.e. points inside the current convex hull) */
-    cnt=0;
 
     /* The main loop for the quickhull algorithm */
     CH_FLOAT detA;
@@ -1043,9 +1039,6 @@ void convhull_nd_build
             free(pleft);
         else
             pleft = (int*)realloc(pleft, num_pleft*sizeof(int));
-
-        /* Update point selection counter */
-        cnt++;
 
         /* find visible faces */
         for(j=0; j<d; j++)

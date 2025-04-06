@@ -28,7 +28,7 @@ void test__ims_shoebox_RIR(void){
     void* hIms;
     float maxTime_s;
     float mov_src_pos[3], mov_rec_pos[3];
-    int sourceID_1, sourceID_2, sourceID_3, sourceID_4, sourceID_5, receiverID;
+    int sourceID_1, sourceID_3, sourceID_4, receiverID;
     int i;
 
     /* Config */
@@ -53,7 +53,7 @@ void test__ims_shoebox_RIR(void){
     /* Set-up the shoebox room simulator, with two sources and one spherical harmonic receiver */
     ims_shoebox_create(&hIms, (float*)roomdims, (float*)abs_wall, 125.0f, nBands, 343.0f, 48e3f);
     sourceID_1 = ims_shoebox_addSource(hIms, (float*)src_pos, NULL);
-    sourceID_2 = ims_shoebox_addSource(hIms, (float*)src2_pos, NULL);
+    ims_shoebox_addSource(hIms, (float*)src2_pos, NULL);
     receiverID = ims_shoebox_addReceiverSH(hIms, sh_order, (float*)rec_pos, NULL);
 
     /* Moving source No.1 and the receiver */
@@ -76,7 +76,7 @@ void test__ims_shoebox_RIR(void){
      * (Just messing around, trying to trip up an IMS internal assertion) */
     sourceID_3 = ims_shoebox_addSource(hIms, (float*)src3_pos, NULL);
     sourceID_4 = ims_shoebox_addSource(hIms, (float*)src4_pos, NULL);
-    sourceID_5 = ims_shoebox_addSource(hIms, (float*)src5_pos, NULL);
+    ims_shoebox_addSource(hIms, (float*)src5_pos, NULL);
     ims_shoebox_removeSource(hIms, sourceID_3);
     ims_shoebox_removeSource(hIms, sourceID_4);
     sourceID_4 = ims_shoebox_addSource(hIms, (float*)src4_pos, NULL);

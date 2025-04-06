@@ -1336,6 +1336,7 @@
 				OTHER_CFLAGS = (
 					"-Wall",
 					"-Wextra",
+					"-Wno-strict-prototypes",
 				);
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -1372,6 +1373,7 @@
 				OTHER_CFLAGS = (
 					"-Wall",
 					"-Wextra",
+					"-Wno-strict-prototypes",
 				);
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = "";

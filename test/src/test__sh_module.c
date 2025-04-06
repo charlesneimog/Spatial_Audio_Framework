@@ -419,7 +419,7 @@ void test__computeSectorCoeffsEP(void){
 }
 
 void test__checkCondNumberSHTReal(void){
-    int i, j, nDirs, order, nSH;
+    int i, j, nDirs, order;
     float* t_dirs_deg, *cond_N;
     float** t_dirs_rad;
 
@@ -431,7 +431,6 @@ void test__checkCondNumberSHTReal(void){
     /* Loop over orders */
     for(i=0; i<nTestOrders; i++) {
         order = testOrders[i];
-        nSH = ORDER2NSH(order);
 
         /* Pull an appropriate t-design */
         t_dirs_deg = (float*)__HANDLES_Tdesign_dirs_deg[2 * order];

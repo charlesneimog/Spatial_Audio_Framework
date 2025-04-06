@@ -521,7 +521,7 @@ void test__smb_pitchShifter(void){
     float* inputData, *outputData;
     void* hPS, *hFFT;
     float frequency;
-    int i, smbLatency, ind;
+    int i, ind;
 
     /* Config */
     const int sampleRate = 48000;
@@ -536,8 +536,7 @@ void test__smb_pitchShifter(void){
     frequency = (float)sampleRate/8.0f;
     for(i=0; i<nSamples; i++) /* sine tone at quarter Nyquist: */
         inputData[i] = sinf(2.0f * SAF_PI * (float)i * frequency/(float)sampleRate);
-    smbLatency = FFTsize - (FFTsize/osfactor);
-
+    
     /* Pitch shift down one octave */
     smb_pitchShift_apply(hPS, 0.5, nSamples, inputData, outputData);
 

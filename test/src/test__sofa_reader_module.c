@@ -37,6 +37,7 @@ void test__saf_sofa_open(void){
         /* Note that saf_sofa_open() reverts to mysofa_load(), if SAF_ENABLE_NETCDF is not defined */
         error = saf_sofa_open(&sofa, SAF_TEST_SOFA_FILE_PATH, SAF_SOFA_READER_OPTION_DEFAULT);
         saf_sofa_close(&sofa);
+        TEST_ASSERT_TRUE( (error==SAF_SOFA_OK) || (error==SAF_SOFA_ERROR_FORMAT_UNEXPECTED) );
     }
 }
 
