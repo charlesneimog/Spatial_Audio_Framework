@@ -752,8 +752,8 @@ int ambi_bin_getEnableTruncationEQ(void* const hAmbi)
     return pData->enableTruncationEQ;
 }
 
-int ambi_bin_getNumEars()
-{ 
+int ambi_bin_getNumEars(void)
+{
     return NUM_EARS;
 }
 
@@ -838,7 +838,7 @@ int ambi_bin_getDAWsamplerate(void* const hAmbi)
     return pData->fs;
 }
 
-int ambi_bin_getProcessingDelay()
+int ambi_bin_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

@@ -578,7 +578,7 @@ int panner_getNumSources(void* const hPan)
     return pData->new_nSources;
 }
 
-int panner_getMaxNumSources()
+int panner_getMaxNumSources(void)
 {
     return MAX_NUM_INPUTS;
 }
@@ -601,7 +601,7 @@ int panner_getNumLoudspeakers(void* const hPan)
     return pData->new_nLoudpkrs;
 }
 
-int panner_getMaxNumLoudspeakers()
+int panner_getMaxNumLoudspeakers(void)
 {
     return MAX_NUM_OUTPUTS;
 }
@@ -660,7 +660,7 @@ int panner_getFlipRoll(void* const hBin)
     return pData->bFlipRoll;
 }
 
-int panner_getProcessingDelay()
+int panner_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

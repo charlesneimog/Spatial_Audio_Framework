@@ -339,7 +339,7 @@ int ambi_enc_getNumSources(void* const hAmbi)
     return pData->new_nSources;
 }
 
-int ambi_enc_getMaxNumSources()
+int ambi_enc_getMaxNumSources(void)
 {
     return MAX_NUM_INPUTS;
 }
@@ -368,7 +368,7 @@ int ambi_enc_getEnablePostScaling(void* const hAmbi)
     return pData->enablePostScaling;
 }
 
-int ambi_enc_getProcessingDelay()
+int ambi_enc_getProcessingDelay(void)
 {
     return AMBI_ENC_FRAME_SIZE;
 }

@@ -906,7 +906,7 @@ int ambi_dec_getNumLoudspeakers(void* const hAmbi)
     return pData->new_nLoudpkrs;
 }
 
-int ambi_dec_getMaxNumLoudspeakers()
+int ambi_dec_getMaxNumLoudspeakers(void)
 {
     return MAX_NUM_LOUDSPEAKERS;
 }
@@ -994,7 +994,7 @@ int ambi_dec_getDAWsamplerate(void* const hAmbi)
     return pData->fs;
 }
 
-int ambi_dec_getProcessingDelay()
+int ambi_dec_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

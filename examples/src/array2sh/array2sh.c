@@ -722,7 +722,7 @@ int array2sh_getSamplingRate(void* const hA2sh)
     return pData->fs;
 }
 
-int array2sh_getProcessingDelay()
+int array2sh_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

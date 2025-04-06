@@ -422,7 +422,7 @@ int ambi_drc_getSamplerate(void* const hAmbi)
     return (int)(pData->fs+0.5f);
 }
 
-int ambi_drc_getProcessingDelay()
+int ambi_drc_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

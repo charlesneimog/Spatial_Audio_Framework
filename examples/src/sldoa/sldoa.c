@@ -641,7 +641,7 @@ int sldoa_getNormType(void* const hSld)
     return (int)pData->norm;
 }
 
-int sldoa_getProcessingDelay()
+int sldoa_getProcessingDelay(void)
 {
     return SLDOA_FRAME_SIZE + 12*HOP_SIZE;
 }

@@ -836,7 +836,7 @@ int spreader_getNumSources(void* const hSpr)
     return pData->new_nSources;
 }
 
-int spreader_getMaxNumSources()
+int spreader_getMaxNumSources(void)
 {
     return SPREADER_MAX_NUM_SOURCES;
 }
@@ -905,7 +905,7 @@ int spreader_getDAWsamplerate(void* const hSpr)
     return pData->fs;
 }
 
-int spreader_getProcessingDelay()
+int spreader_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

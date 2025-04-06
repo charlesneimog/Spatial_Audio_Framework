@@ -330,7 +330,7 @@ int decorrelator_getDAWsamplerate(void* const hDecor)
     return pData->fs;
 }
 
-int decorrelator_getProcessingDelay()
+int decorrelator_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }

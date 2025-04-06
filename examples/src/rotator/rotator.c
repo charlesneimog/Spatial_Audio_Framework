@@ -431,7 +431,7 @@ int rotator_getNSHrequired(void* const hRot)
     return (pData->inputOrder+1)*(pData->inputOrder+1);
 }
 
-int rotator_getProcessingDelay()
+int rotator_getProcessingDelay(void)
 {
     return ROTATOR_FRAME_SIZE;
 }

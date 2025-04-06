@@ -682,7 +682,7 @@ int dirass_getPmap(void* const hDir, float** grid_dirs, float** pmap, int* nDirs
     return pData->pmapReady;
 }
 
-int dirass_getProcessingDelay()
+int dirass_getProcessingDelay(void)
 {
     return 2*DIRASS_FRAME_SIZE;
 }

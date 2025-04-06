@@ -743,7 +743,7 @@ int powermap_getPmap(void* const hPm, float** grid_dirs, float** pmap, int* nDir
     return pData->pmapReady;
 }
 
-int powermap_getProcessingDelay()
+int powermap_getProcessingDelay(void)
 {
     return POWERMAP_FRAME_SIZE + 12*HOP_SIZE;
 }

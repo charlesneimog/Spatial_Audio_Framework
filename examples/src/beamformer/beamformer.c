@@ -303,7 +303,7 @@ int beamformer_getNumBeams(void* const hBeam)
     return pData->nBeams;
 }
 
-int beamformer_getMaxNumBeams()
+int beamformer_getMaxNumBeams(void)
 {
     return MAX_NUM_BEAMS;
 }
@@ -332,7 +332,7 @@ int beamformer_getBeamType(void* const hBeam)
     return pData->beamType;
 }
 
-int beamformer_getProcessingDelay()
+int beamformer_getProcessingDelay(void)
 {
     return BEAMFORMER_FRAME_SIZE;
 }

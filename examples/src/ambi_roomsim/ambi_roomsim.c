@@ -385,7 +385,7 @@ int ambi_roomsim_getNumSources(void* const hAmbi)
     return pData->new_nSources;
 }
 
-int ambi_roomsim_getMaxNumSources()
+int ambi_roomsim_getMaxNumSources(void)
 {
     return ROOM_SIM_MAX_NUM_SOURCES;
 }
@@ -423,7 +423,7 @@ int ambi_roomsim_getNumReceivers(void* const hAmbi)
     return pData->new_nReceivers;
 }
 
-int ambi_roomsim_getMaxNumReceivers()
+int ambi_roomsim_getMaxNumReceivers(void)
 {
     return ROOM_SIM_MAX_NUM_RECEIVERS;
 }
@@ -485,7 +485,7 @@ int ambi_roomsim_getNormType(void* const hAmbi)
     return (int)pData->norm;
 }
 
-int ambi_roomsim_getProcessingDelay()
+int ambi_roomsim_getProcessingDelay(void)
 {
     return AMBI_ROOMSIM_FRAME_SIZE;
 }

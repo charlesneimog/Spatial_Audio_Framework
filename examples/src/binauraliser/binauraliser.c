@@ -518,7 +518,7 @@ int binauraliser_getNumSources(void* const hBin)
     return pData->new_nSources;
 }
 
-int binauraliser_getMaxNumSources()
+int binauraliser_getMaxNumSources(void)
 {
     return MAX_NUM_INPUTS;
 }
@@ -651,7 +651,7 @@ int binauraliser_getInterpMode(void* const hBin)
     return (int)pData->interpMode;
 }
 
-int binauraliser_getProcessingDelay()
+int binauraliser_getProcessingDelay(void)
 {
     return 12*HOP_SIZE;
 }
