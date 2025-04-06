@@ -172,6 +172,8 @@ elseif(APPLE AND ${SAF_PERFORMANCE_LIB} MATCHES "SAF_USE_APPLE_ACCELERATE")
     target_compile_definitions(${PROJECT_NAME} PUBLIC SAF_USE_APPLE_ACCELERATE=1) 
     target_link_libraries(${PROJECT_NAME} PUBLIC "-framework Accelerate") 
 
+    # These are just because of zlib  
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-macro-redefined -Wno-strict-prototypes)
 else()
     message(SEND_ERROR "The specified SAF_PERFORMANCE_LIB is not supported")
 

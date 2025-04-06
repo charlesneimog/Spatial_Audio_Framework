@@ -204,7 +204,7 @@ void tvconv_checkReInit(void* const hTVCnv)
 {
     tvconv_data *pData = (tvconv_data*)(hTVCnv);
     
-    while (pData->procStatus == CODEC_STATUS_INITIALISING){
+    while (pData->procStatus == /* FIXME: this comparison between different enum types is surely wrong? */ (PROC_STATUS)CODEC_STATUS_INITIALISING){
         SAF_SLEEP(10);
     }
     /* reinitialise if needed */
