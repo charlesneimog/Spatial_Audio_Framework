@@ -20,7 +20,7 @@ set(ver_patch ${CMAKE_MATCH_1})
 set(SAF_VERSION "${ver_major}.${ver_minor}.${ver_patch}")
 
 # Display License
-if(SAF_ENABLE_TRACKER_MODULE)
+if(SAF_ENABLE_TRACKER_MODULE OR SAF_ENABLE_HADES_MODULE)
     set(SAF_LICENSE "GNU GPLv2")
 else()
     set(SAF_LICENSE "ISC")
@@ -316,9 +316,6 @@ if(SAF_ENABLE_SOFA_READER_MODULE)
                  target_link_libraries(${PROJECT_NAME}
                  PRIVATE
                      ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/MacOSX/lib/libz.a
-                 )
-                 target_link_libraries(${PROJECT_NAME}
-                 PRIVATE
                      ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/MacOSX/lib/libnetcdf.a
                      ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/MacOSX/lib/libhdf5.a
                      ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/MacOSX/lib/libhdf5_hl.a
@@ -326,13 +323,23 @@ if(SAF_ENABLE_SOFA_READER_MODULE)
              endif()
 
         elseif(UNIX AND NOT APPLE)
-            find_library(NETCDF_LIBRARY netcdf HINTS HINTS /usr/lib/x86_64-linux-gnu /usr/lib/arm-linux-gnueabihf)
-            if (NOT NETCDF_LIBRARY)
-                message(FATAL_ERROR "NETCDF_LIBRARY not found")
-            endif()
-            target_link_libraries(${PROJECT_NAME} PUBLIC ${NETCDF_LIBRARY})
-            message(STATUS "Linking NETCDF: ${NETCDF_LIBRARY}")
-
+            if (SAF_NETCDF_INCLUDE_DIR AND SAF_NETCDF_LIBRARIES)
+                 message(STATUS "Using NetCDF include dir ${SAF_NETCDF_INCLUDE_DIR} and libraries ${SAF_NETCDF_LIBRARIES}")
+                 target_include_directories(${PROJECT_NAME} PUBLIC ${SAF_NETCDF_INCLUDE_DIR})
+                 target_link_libraries(${PROJECT_NAME} PRIVATE ${SAF_NETCDF_LIBRARIES})
+             else()
+                 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/Linux/include)
+                 target_link_libraries(${PROJECT_NAME}
+                 PUBLIC
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/Linux/lib/libz.a
+                 )
+                 target_link_libraries(${PROJECT_NAME}
+                 PRIVATE
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/Linux/lib/libnetcdf.a
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/Linux/lib/libhdf5.a
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/Linux/lib/libhdf5_hl.a
+                 )
+             endif()
         endif() 
     endif() 
 else()
