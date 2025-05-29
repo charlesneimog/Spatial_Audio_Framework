@@ -187,7 +187,7 @@ extern "C" {
  * functions used in saf_utility_veclib will need to be swapped out for
  * equivalent functions in GSL
  */
-# error Using GNU Scientific Library (GSL) is currently unsupported/incomplete
+#pragma message("Warning: Using GNU Scientific Library (GSL) is currently unsupported/incomplete")
 # include "gsl_cblas.h"
 
 #else

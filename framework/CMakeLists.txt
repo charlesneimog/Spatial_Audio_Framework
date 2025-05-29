@@ -171,10 +171,13 @@ elseif(APPLE AND ${SAF_PERFORMANCE_LIB} MATCHES "SAF_USE_APPLE_ACCELERATE")
     message(STATUS "Using Apple Accelerate. Linking against the Accelerate framework...")
     target_compile_definitions(${PROJECT_NAME} PUBLIC SAF_USE_APPLE_ACCELERATE=1) 
     target_link_libraries(${PROJECT_NAME} PUBLIC "-framework Accelerate") 
-
+elseif(${SAF_PERFORMANCE_LIB} MATCHES "SAF_USE_GSL")
+    find_package(GSL REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE GSL::gsl GSL::gslcblas)
+    target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/gsl/")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC SAF_USE_GSL=1) 
 else()
-    message(SEND_ERROR "The specified SAF_PERFORMANCE_LIB is not supported")
-
+    message(SEND_ERROR "The specified SAF_PERFORMANCE_LIB (${SAF_PERFORMANCE_LIB}) is not supported")
 endif()
 
 ############################################################################
