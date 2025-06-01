@@ -251,7 +251,7 @@ void decorrelator_setNumberOfChannels(void* const hDecor, int newValue )
 
     if(newValue!=pData->new_nChannels){
         pData->new_nChannels = newValue;
-            decorrelator_setCodecStatus(hDecor, CODEC_STATUS_NOT_INITIALISED);
+        decorrelator_setCodecStatus(hDecor, CODEC_STATUS_NOT_INITIALISED);
     }
 }
 
