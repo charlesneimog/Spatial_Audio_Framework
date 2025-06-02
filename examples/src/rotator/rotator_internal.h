@@ -70,7 +70,6 @@ typedef struct _rotator
 {
     /* Internal buffers */
     float inputFrameTD[MAX_NUM_SH_SIGNALS][ROTATOR_FRAME_SIZE];         /**< Input frame of signals */
-    float prev_inputFrameTD[MAX_NUM_SH_SIGNALS][ROTATOR_FRAME_SIZE];    /**< Previous frame of signals */
     float tempFrame[MAX_NUM_SH_SIGNALS][ROTATOR_FRAME_SIZE];            /**< Temporary frame */
     float tempFrame_fadeOut[MAX_NUM_SH_SIGNALS][ROTATOR_FRAME_SIZE];    /**< Temporary frame with linear interpolation (fade-out) applied */
     float outputFrameTD[MAX_NUM_SH_SIGNALS][ROTATOR_FRAME_SIZE];        /**< Output frame of SH signals */

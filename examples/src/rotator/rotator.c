@@ -94,7 +94,6 @@ void rotator_init
     }
     memset(pData->M_rot, 0, MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS*sizeof(float));
     memset(pData->prev_M_rot, 0, MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS*sizeof(float));
-    memset(pData->prev_inputFrameTD, 0, MAX_NUM_SH_SIGNALS*ROTATOR_FRAME_SIZE*sizeof(float));
     pData->M_rot_status = M_ROT_RECOMPUTE_EULER;//M_ROT_RECOMPUTE_QUATERNION;
 }
 
@@ -159,14 +158,14 @@ void rotator_process
             /* apply rotation */
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nSH, ROTATOR_FRAME_SIZE, nSH, 1.0f,
                         (float*)(pData->M_rot), MAX_NUM_SH_SIGNALS,
-                        (float*)pData->prev_inputFrameTD, ROTATOR_FRAME_SIZE, 0.0f,
+                        (float*)pData->inputFrameTD, ROTATOR_FRAME_SIZE, 0.0f,
                         (float*)pData->outputFrameTD, ROTATOR_FRAME_SIZE);
 
             /* Fade between (linearly inerpolate) the new rotation matrix and the previous rotation matrix (only if the new rotation matrix is different) */
             if(mixWithPreviousFLAG){
                 cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nSH, ROTATOR_FRAME_SIZE, nSH, 1.0f,
                             (float*)pData->prev_M_rot, MAX_NUM_SH_SIGNALS,
-                            (float*)pData->prev_inputFrameTD, ROTATOR_FRAME_SIZE, 0.0f,
+                            (float*)pData->inputFrameTD, ROTATOR_FRAME_SIZE, 0.0f,
                             (float*)pData->tempFrame, ROTATOR_FRAME_SIZE);
 
                 /* Apply the linear interpolation */
@@ -180,9 +179,6 @@ void rotator_process
                 /* for next frame */
                 utility_svvcopy((const float*)pData->M_rot, MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS, (float*)pData->prev_M_rot);
             }
-
-            /* for next frame */
-            utility_svvcopy((const float*)pData->inputFrameTD, MAX_NUM_SH_SIGNALS*ROTATOR_FRAME_SIZE, (float*)pData->prev_inputFrameTD);
         }
         else /* Pass-through the omni (cannot be rotated...) */
             utility_svvcopy((const float*)pData->inputFrameTD[0], ROTATOR_FRAME_SIZE, (float*)pData->outputFrameTD[0]);

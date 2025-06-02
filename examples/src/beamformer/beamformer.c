@@ -82,7 +82,6 @@ void beamformer_init
    
     /* defaults */
     memset(pData->beamWeights, 0, MAX_NUM_BEAMS*MAX_NUM_SH_SIGNALS*sizeof(float));
-    memset(pData->prev_SHFrameTD, 0, MAX_NUM_SH_SIGNALS*BEAMFORMER_FRAME_SIZE*sizeof(float));
     memset(pData->prev_beamWeights, 0, MAX_NUM_BEAMS*MAX_NUM_SH_SIGNALS*sizeof(float));
     for(ch=0; ch<MAX_NUM_BEAMS; ch++)
         pData->recalc_beamWeights[ch] = 1;
@@ -157,14 +156,14 @@ void beamformer_process
         /* Apply beam weights */
         cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nBeams, BEAMFORMER_FRAME_SIZE, nSH, 1.0f,
                     (const float*)pData->beamWeights, MAX_NUM_SH_SIGNALS,
-                    (const float*)pData->prev_SHFrameTD, BEAMFORMER_FRAME_SIZE, 0.0f,
+                    (const float*)pData->SHFrameTD, BEAMFORMER_FRAME_SIZE, 0.0f,
                     (float*)pData->outputFrameTD, BEAMFORMER_FRAME_SIZE);
 
         /* Fade between (linearly inerpolate) the new weights and the previous weights (only if the new weights are different) */
         if(mixWithPreviousFLAG){
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nBeams, BEAMFORMER_FRAME_SIZE, nSH, 1.0f,
                         (float*)pData->prev_beamWeights, MAX_NUM_SH_SIGNALS,
-                        (float*)pData->prev_SHFrameTD, BEAMFORMER_FRAME_SIZE, 0.0f,
+                        (float*)pData->SHFrameTD, BEAMFORMER_FRAME_SIZE, 0.0f,
                         (float*)pData->tempFrame, BEAMFORMER_FRAME_SIZE);
 
             /* Apply the linear interpolation */
@@ -178,9 +177,6 @@ void beamformer_process
             /* for next frame */
             utility_svvcopy((const float*)pData->beamWeights, MAX_NUM_BEAMS*MAX_NUM_SH_SIGNALS, (float*)pData->prev_beamWeights);
         }
-
-        /* for next frame */
-        utility_svvcopy((const float*)pData->SHFrameTD, MAX_NUM_SH_SIGNALS*BEAMFORMER_FRAME_SIZE, (float*)pData->prev_SHFrameTD);
         
         /* copy to output buffer */
         for(ch = 0; ch < SAF_MIN(nBeams, nOutputs); ch++)

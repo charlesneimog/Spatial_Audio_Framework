@@ -60,7 +60,6 @@ typedef struct _beamformer
 {
     /* Internal audio buffers */
     float SHFrameTD[MAX_NUM_SH_SIGNALS][BEAMFORMER_FRAME_SIZE];             /**< Input frame of SH signals */
-    float prev_SHFrameTD[MAX_NUM_SH_SIGNALS][BEAMFORMER_FRAME_SIZE];        /**< Previous frame of SH signals */
     float tempFrame[MAX_NUM_BEAMS][BEAMFORMER_FRAME_SIZE];                  /**< Temporary frame */
     float tempFrame_fadeOut[MAX_NUM_SH_SIGNALS][BEAMFORMER_FRAME_SIZE];     /**< Temporary frame with linear interpolation (fade-out) applied */
     float outputFrameTD[MAX_NUM_BEAMS][BEAMFORMER_FRAME_SIZE];              /**< Output frame of beam signals */

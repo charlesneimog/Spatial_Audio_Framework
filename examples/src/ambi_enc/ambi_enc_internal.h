@@ -58,7 +58,6 @@ typedef struct _ambi_enc
 {
     /* Internal audio buffers */
     float inputFrameTD[MAX_NUM_INPUTS][AMBI_ENC_FRAME_SIZE];              /**< Input frame of signals */
-    float prev_inputFrameTD[MAX_NUM_INPUTS][AMBI_ENC_FRAME_SIZE];         /**< Previous frame of signals */
     float tempFrame_fadeOut[MAX_NUM_SH_SIGNALS][AMBI_ENC_FRAME_SIZE];     /**< Temporary frame with linear interpolation (fade-out) applied */
     float tempFrame[MAX_NUM_SH_SIGNALS][AMBI_ENC_FRAME_SIZE];             /**< Temporary frame */
     float outputFrameTD_fadeIn[MAX_NUM_SH_SIGNALS][AMBI_ENC_FRAME_SIZE];  /**< Output frame of SH signals with linear interpolation (fade-in) applied */

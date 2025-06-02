@@ -80,7 +80,6 @@ void ambi_enc_init
         pData->interpolator_fadeOut[i-1] = 1.0f - pData->interpolator_fadeIn[i-1];
     }
     memset(pData->prev_Y, 0, MAX_NUM_SH_SIGNALS*MAX_NUM_INPUTS*sizeof(float));
-    memset(pData->prev_inputFrameTD, 0, MAX_NUM_INPUTS*AMBI_ENC_FRAME_SIZE*sizeof(float));
     for(i=0; i<MAX_NUM_INPUTS; i++)
         pData->recalc_SH_FLAG[i] = 1;
 }
@@ -141,14 +140,14 @@ void ambi_enc_process
         /* spatially encode the input signals into spherical harmonic signals */
         cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nSH, AMBI_ENC_FRAME_SIZE, nSources, 1.0f,
                     (float*)pData->Y, MAX_NUM_INPUTS,
-                    (float*)pData->prev_inputFrameTD, AMBI_ENC_FRAME_SIZE, 0.0f,
+                    (float*)pData->inputFrameTD, AMBI_ENC_FRAME_SIZE, 0.0f,
                     (float*)pData->outputFrameTD, AMBI_ENC_FRAME_SIZE);
 
         /* Fade between (linearly inerpolate) the new gains and the previous gains (only if the new gains are different) */
         if(mixWithPreviousFLAG){
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, nSH, AMBI_ENC_FRAME_SIZE, nSources, 1.0f,
                         (float*)pData->prev_Y, MAX_NUM_INPUTS,
-                        (float*)pData->prev_inputFrameTD, AMBI_ENC_FRAME_SIZE, 0.0f,
+                        (float*)pData->inputFrameTD, AMBI_ENC_FRAME_SIZE, 0.0f,
                         (float*)pData->tempFrame, AMBI_ENC_FRAME_SIZE);
 
             /* Apply the linear interpolation */
@@ -162,9 +161,6 @@ void ambi_enc_process
             /* for next frame */
             utility_svvcopy((const float*)pData->Y, MAX_NUM_INPUTS*MAX_NUM_SH_SIGNALS, (float*)pData->prev_Y);
         }
-
-        /* for next frame */
-        utility_svvcopy((const float*)pData->inputFrameTD, MAX_NUM_INPUTS*AMBI_ENC_FRAME_SIZE, (float*)pData->prev_inputFrameTD);
 
         /* scale by 1/sqrt(nSources) */
         if(pData->enablePostScaling){
