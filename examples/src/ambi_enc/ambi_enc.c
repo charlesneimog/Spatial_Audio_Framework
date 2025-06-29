@@ -366,5 +366,5 @@ int ambi_enc_getEnablePostScaling(void* const hAmbi)
 
 int ambi_enc_getProcessingDelay(void)
 {
-    return AMBI_ENC_FRAME_SIZE;
+    return 0;
 }

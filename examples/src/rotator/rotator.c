@@ -429,5 +429,5 @@ int rotator_getNSHrequired(void* const hRot)
 
 int rotator_getProcessingDelay(void)
 {
-    return ROTATOR_FRAME_SIZE;
+    return 0;
 }

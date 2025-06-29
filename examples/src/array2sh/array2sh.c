@@ -440,6 +440,9 @@ void array2sh_setArrayType(void* const hA2sh, int newType)
     
     if(arraySpecs->arrayType != (ARRAY2SH_ARRAY_TYPES)newType){
         arraySpecs->arrayType = (ARRAY2SH_ARRAY_TYPES)newType;
+        if( !(arraySpecs->weightType == WEIGHT_RIGID_OMNI || arraySpecs->weightType == WEIGHT_OPEN_OMNI)){
+            arraySpecs->weightType = WEIGHT_RIGID_OMNI;
+        }
         pData->reinitSHTmatrixFLAG = 1;
         array2sh_setEvalStatus(hA2sh, EVAL_STATUS_NOT_EVALUATED);
     }

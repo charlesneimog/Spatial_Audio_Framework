@@ -254,8 +254,8 @@ void test__saf_example_ambi_enc(void){
 
     /* ambi_enc should be equivalent to the reference */
     for(i=0; i<nSH; i++)
-        for(j=0; j<signalLength-delay; j++)
-            TEST_ASSERT_FLOAT_WITHIN(acceptedTolerance, shSig_ref[i][j], shSig[i][j+delay]);
+        for(j=framesize; j<signalLength-framesize; j++)
+            TEST_ASSERT_FLOAT_WITHIN(acceptedTolerance, shSig_ref[i][j], shSig[i][j]);
 
     /* Clean-up */
     ambi_enc_destroy(&hAmbi);
@@ -428,8 +428,8 @@ void test__saf_example_rotator(void){
     /* ambi_enc should be equivalent to the reference, except delayed due to the
      * temporal interpolation employed in ambi_enc */
     for(i=0; i<nSH; i++)
-        for(j=0; j<signalLength-delay; j++)
-            TEST_ASSERT_FLOAT_WITHIN(acceptedTolerance, shSig_rot_ref[i][j], shSig_rot[i][j+delay]);
+        for(j=framesize; j<signalLength-framesize; j++)
+            TEST_ASSERT_FLOAT_WITHIN(acceptedTolerance, shSig_rot_ref[i][j], shSig_rot[i][j]);
 
     /* Clean-up */
     rotator_destroy(&hRot);

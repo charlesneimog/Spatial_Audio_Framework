@@ -7,7 +7,7 @@
 
 # About
 
-The Spatial_Audio_Framework (SAF) is an open-source and cross-platform framework for developing spatial audio related algorithms and software in C/C++. Originally intended as a resource for researchers in the field, the framework has gradually grown into a large codebase comprising a number of distinct [**modules**](framework/modules); with each module targeting a specific sub-field of spatial audio, such as: Ambisonics encoding/decoding, spherical array processing, amplitude-panning, HRIR processing, room simulation, etc.. The framework also makes use of highly optimised linear algebra libraries (such as: Intel MKL, Apple Accelerate, OpenBLAS) as well as x86 SIMD intrinsics (SSE, AVX, AVX-512). 
+The Spatial_Audio_Framework (SAF) is an open-source and cross-platform framework for developing spatial audio related algorithms and software in C/C++. Originally intended as a resource for researchers in the field, the framework has gradually grown into a large codebase comprising a number of distinct [**modules**](framework/modules). Each module targets a specific sub-field of spatial audio, such as: Ambisonics encoding/decoding, spherical array processing, amplitude-panning (VBAP), HRIR processing, room simulation, etc. The framework also makes use of highly optimised linear algebra libraries (such as: Intel MKL, Apple Accelerate, OpenBLAS) as well as x86 SIMD intrinsics (SSE, AVX, AVX-512). 
 
 Several [**examples**](examples/include) are also included in the repository, which serve to demonstrate the functionality of the framework and may also act as a starting point for new projects. These examples have also been realised as VST/LV2 audio plug-ins under the [**SPARTA**](https://github.com/leomccormack/SPARTA) banner.
 
@@ -46,7 +46,7 @@ The [framework](docs/FRAMEWORK_STRUCTURE.md) comprises the following core module
 The framework also includes the following optional modules:
 * **saf_sofa_reader** - a simple SOFA file reader (**ISC** License).
 * **saf_tracker** - a particle-filtering based tracker (**GPLv2** License).
-* **saf_hades** - for binaural rendering of Hearing-Assistive/Augmented-reality Devices (HADES)  (**GPLv2** License).
+* **saf_hades** - for binaural rendering of Hearing-Assistive/Augmented-reality Devices (HADES) (**GPLv2** License).
 
 To enable optional framework modules, simply add the relevant pre-processor definition:
 ```
@@ -57,10 +57,10 @@ SAF_ENABLE_HADES_MODULE        # to enable saf_hades
 
 ### Additional options
 
-The framework can be configured further, with the following options:
+The framework can be configured further with the following options:
 ```
-SAF_USE_INTEL_IPP # To use Intel IPP for performing the DFT/FFT and resampling
-SAF_USE_FFTW      # To use the FFTW library for performing the DFT/FFT 
+SAF_USE_INTEL_IPP # To use Intel IPP for performing the DFT/FFTs and resampling
+SAF_USE_FFTW      # To use the FFTW library for performing the DFT/FFTs 
 SAF_ENABLE_SIMD   # To enable SIMD (SSE3, AVX2 and/or AVX512) intrinsics for certain vector operations
 ```
 

@@ -450,11 +450,15 @@ void ambi_dec_initCodec
         pars->hrtf_fb_mag = realloc1d(pars->hrtf_fb_mag, HYBRID_BANDS*NUM_EARS*(pars->N_hrir_dirs)*sizeof(float));
         for(i=0; i<HYBRID_BANDS*NUM_EARS* (pars->N_hrir_dirs); i++)
             pars->hrtf_fb_mag[i] = cabsf(pars->hrtf_fb[i]);
-        
+                
         /* clean-up */
         free(hrtf_vbap_gtable);
         pData->reinit_hrtfsFLAG = 0;
     }
+    
+    /* HRTFs should be reinterpolated */
+    for(ch=0; ch<MAX_NUM_LOUDSPEAKERS; ch++)
+        pData->recalc_hrtf_interpFLAG[ch] = 1;
     
     /* done! */
     strcpy(pData->progressBarText,"Done!");
@@ -597,9 +601,6 @@ void ambi_dec_process
 void ambi_dec_refreshSettings(void* const hAmbi)
 {
     ambi_dec_data *pData = (ambi_dec_data*)(hAmbi);
-    int ch;
-    for(ch=0; ch<MAX_NUM_LOUDSPEAKERS; ch++)
-        pData->recalc_hrtf_interpFLAG[ch] = 1;
     pData->reinit_hrtfsFLAG = 1;
     ambi_dec_setCodecStatus(hAmbi, CODEC_STATUS_NOT_INITIALISED);
 }

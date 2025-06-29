@@ -330,7 +330,7 @@ int beamformer_getBeamType(void* const hBeam)
 
 int beamformer_getProcessingDelay(void)
 {
-    return BEAMFORMER_FRAME_SIZE;
+    return 0;
 }
 
 
