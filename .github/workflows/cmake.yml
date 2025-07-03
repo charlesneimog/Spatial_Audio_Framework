@@ -56,12 +56,13 @@ jobs:
       run: |
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DSAF_PERFORMANCE_LIB=SAF_USE_APPLE_ACCELERATE -DSAF_ENABLE_TRACKER_MODULE=1 -DSAF_ENABLE_SOFA_READER_MODULE=1 -DSAF_ENABLE_HADES_MODULE=1
     
-    - name: Configure CMake (Windows)
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      if: ${{ contains( runner.os, 'Windows' ) }}
-      run: |
-        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DSAF_PERFORMANCE_LIB=SAF_USE_OPEN_BLAS_AND_LAPACKE -DOPENBLAS_LIBRARY=$GITHUB_WORKSPACE/OpenBLAS/lib/libopenblas.lib -DLAPACKE_LIBRARY=$GITHUB_WORKSPACE/OpenBLAS/lib/libopenblas.lib -DOPENBLAS_HEADER_PATH=$GITHUB_WORKSPACE/OpenBLAS/include/ -DSAF_ENABLE_TRACKER_MODULE=1 -DSAF_ENABLE_SOFA_READER_MODULE=1 -DSAF_ENABLE_HADES_MODULE=1
+    # Disabling since latest-windows on GitHub CI is having issues?
+    #- name: Configure CMake (Windows)
+    #  shell: bash
+    #  working-directory: ${{runner.workspace}}/build
+    #  if: ${{ contains( runner.os, 'Windows' ) }}
+    #  run: |
+    #    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DSAF_PERFORMANCE_LIB=SAF_USE_OPEN_BLAS_AND_LAPACKE -DOPENBLAS_LIBRARY=$GITHUB_WORKSPACE/OpenBLAS/lib/libopenblas.lib -DLAPACKE_LIBRARY=$GITHUB_WORKSPACE/OpenBLAS/lib/libopenblas.lib -DOPENBLAS_HEADER_PATH=$GITHUB_WORKSPACE/OpenBLAS/include/ -DSAF_ENABLE_TRACKER_MODULE=1 -DSAF_ENABLE_SOFA_READER_MODULE=1 -DSAF_ENABLE_HADES_MODULE=1
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
