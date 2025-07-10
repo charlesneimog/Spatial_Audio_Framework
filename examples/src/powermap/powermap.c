@@ -48,7 +48,7 @@ void powermap_create
         pData->pmapEQ[band] = 1.0f;
     }
     pData->covAvgCoeff = 0.0f;
-    pData->pmapAvgCoeff = 0.666f;
+    pData->pmapAvgCoeff = 0.25f;
     pData->nSources = 1;
     pData->pmap_mode = PM_MODE_MUSIC;
     pData->HFOVoption = HFOV_360;
@@ -71,6 +71,7 @@ void powermap_create
     pars->interp_table = NULL;
     
     /* internal */
+    pData->isFirstInit = 1;
     pData->progressBar0_1 = 0.0f;
     pData->progressBarText = malloc1d(PROGRESSBARTEXT_CHAR_LENGTH*sizeof(char));
     strcpy(pData->progressBarText,"");
@@ -173,7 +174,7 @@ void powermap_initCodec
     /* for progress bar */
     pData->codecStatus = CODEC_STATUS_INITIALISING;
     strcpy(pData->progressBarText,"Initialising");
-    pData->progressBar0_1 = 0.0f;
+    pData->progressBar0_1 = 0.5f;
     
     powermap_initTFT(hPm);
     powermap_initAna(hPm);

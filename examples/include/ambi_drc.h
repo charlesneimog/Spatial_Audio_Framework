@@ -78,7 +78,7 @@ extern "C" {
 #define AMBI_DRC_IN_GAIN_MIN_VAL ( -40.0f )   /**< Minimum input gain, dB */
 #define AMBI_DRC_IN_GAIN_MAX_VAL ( 20.0f )    /**< Maximum input gain, dB */
 #define AMBI_DRC_THRESHOLD_MIN_VAL ( -60.0f ) /**< Minimum threshold, dB */
-#define AMBI_DRC_THRESHOLD_MAX_VAL ( 0.0f )   /**< Maximum threshold, dB */
+#define AMBI_DRC_THRESHOLD_MAX_VAL ( 6.0f )   /**< Maximum threshold, dB */
 #define AMBI_DRC_RATIO_MIN_VAL ( 1.0f )       /**< Minimum ratio, X:1 */
 #define AMBI_DRC_RATIO_MAX_VAL ( 30.0f )      /**< Maximum ratio, X:1 */
 #define AMBI_DRC_KNEE_MIN_VAL ( 0.0f )        /**< Minimum knee, dB */

@@ -52,7 +52,7 @@ void dirass_create
     pData->DirAssMode = REASS_UPSCALE;
     pData->upscaleOrder = pData->new_upscaleOrder = UPSCALE_ORDER_TENTH;
     pData->gridOption = GRID_GEOSPHERE_8;
-    pData->pmapAvgCoeff = 0.666f;
+    pData->pmapAvgCoeff = 0.2f;
     pData->minFreq_hz = 100.0f;
     pData->maxFreq_hz = 8e3f;
     pData->dispWidth = 120;

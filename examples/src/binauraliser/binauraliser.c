@@ -582,7 +582,7 @@ char* binauraliser_getSofaFilePath(void* const hBin)
     if(pData->sofa_filepath!=NULL)
         return pData->sofa_filepath;
     else
-        return "no_file";
+        return "/Spatial_Audio_Framework/Default";
 }
 
 int binauraliser_getEnableHRIRsDiffuseEQ(void* const hBin)

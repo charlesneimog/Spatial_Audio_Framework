@@ -73,51 +73,55 @@ void powermap_initAna(void* const hPm)
                 pars->Y_grid_cmplx[n-1][i*(pars->grid_nDirs)+j] = cmplxf(pars->Y_grid[n-1][i*(pars->grid_nDirs)+j], 0.0f);
     }
 
-    /* generate interpolation table for current display settings */
-    switch(pData->HFOVoption){
-        default:
-        case HFOV_360: hfov = 360.0f; break;
-    }
-    switch(pData->aspectRatioOption){
-        default:
-        case ASPECT_RATIO_2_1: aspectRatio = 2.0f; break;
-    }
-    N_azi = pData->dispWidth;
-    N_ele = (int)((float)pData->dispWidth/aspectRatio + 0.5f);
-    grid_x_axis = malloc1d(N_azi * sizeof(float));
-    grid_y_axis = malloc1d(N_ele * sizeof(float));
-    vfov = hfov/aspectRatio;
-    for(fi = -hfov/2.0f, i = 0; i<N_azi; fi+=hfov/N_azi, i++)
-        grid_x_axis[i] = fi;
-    for(fi = -vfov/2.0f,  i = 0; i<N_ele; fi+=vfov/N_ele, i++)
-        grid_y_axis[i] = fi;
-    free(pars->interp_dirs_deg);
-    pars->interp_dirs_deg = malloc1d(N_azi*N_ele*2*sizeof(float));
-    for(i = 0; i<N_ele; i++){
-        for(j=0; j<N_azi; j++){
-            pars->interp_dirs_deg[(i*N_azi + j)*2]   = grid_x_axis[j];
-            pars->interp_dirs_deg[(i*N_azi + j)*2+1] = grid_y_axis[i];
+    if(pData->isFirstInit){
+        /* generate interpolation table for current display settings */
+        switch(pData->HFOVoption){
+            default:
+            case HFOV_360: hfov = 360.0f; break;
         }
-    }
-    free(pars->interp_table);
-    generateVBAPgainTable3D_srcs(pars->interp_dirs_deg, N_azi*N_ele, pars->grid_dirs_deg, pars->grid_nDirs, 0, 0, 0.0f, &(pars->interp_table), &(pars->interp_nDirs), &(pars->interp_nTri));
-    VBAPgainTable2InterpTable(pars->interp_table, pars->interp_nDirs, pars->grid_nDirs);
-    
-    /* reallocate memory for storing the powermaps */
-    free(pData->pmap);
-    pData->pmap = malloc1d(pars->grid_nDirs*sizeof(float));
-    free(pData->prev_pmap);
-    pData->prev_pmap = calloc1d(pars->grid_nDirs, sizeof(float));
-    for(i=0; i<NUM_DISP_SLOTS; i++){
-        free(pData->pmap_grid[i]);
-        pData->pmap_grid[i] = calloc1d(pars->interp_nDirs,sizeof(float));
+        switch(pData->aspectRatioOption){
+            default:
+            case ASPECT_RATIO_2_1: aspectRatio = 2.0f; break;
+        }
+        N_azi = pData->dispWidth;
+        N_ele = (int)((float)pData->dispWidth/aspectRatio + 0.5f);
+        grid_x_axis = malloc1d(N_azi * sizeof(float));
+        grid_y_axis = malloc1d(N_ele * sizeof(float));
+        vfov = hfov/aspectRatio;
+        for(fi = -hfov/2.0f, i = 0; i<N_azi; fi+=hfov/N_azi, i++)
+            grid_x_axis[i] = fi;
+        for(fi = -vfov/2.0f,  i = 0; i<N_ele; fi+=vfov/N_ele, i++)
+            grid_y_axis[i] = fi;
+        free(pars->interp_dirs_deg);
+        pars->interp_dirs_deg = malloc1d(N_azi*N_ele*2*sizeof(float));
+        for(i = 0; i<N_ele; i++){
+            for(j=0; j<N_azi; j++){
+                pars->interp_dirs_deg[(i*N_azi + j)*2]   = grid_x_axis[j];
+                pars->interp_dirs_deg[(i*N_azi + j)*2+1] = grid_y_axis[i];
+            }
+        }
+        free(pars->interp_table);
+        generateVBAPgainTable3D_srcs(pars->interp_dirs_deg, N_azi*N_ele, pars->grid_dirs_deg, pars->grid_nDirs, 0, 0, 0.0f, &(pars->interp_table), &(pars->interp_nDirs), &(pars->interp_nTri));
+        VBAPgainTable2InterpTable(pars->interp_table, pars->interp_nDirs, pars->grid_nDirs);
+        
+        /* reallocate memory for storing the powermaps */
+        free(pData->pmap);
+        pData->pmap = malloc1d(pars->grid_nDirs*sizeof(float));
+        free(pData->prev_pmap);
+        pData->prev_pmap = calloc1d(pars->grid_nDirs, sizeof(float));
+        for(i=0; i<NUM_DISP_SLOTS; i++){
+            free(pData->pmap_grid[i]);
+            pData->pmap_grid[i] = calloc1d(pars->interp_nDirs,sizeof(float));
+        }
+        free(grid_x_axis);
+        free(grid_y_axis);
+        
+        pData->isFirstInit = 0;
     }
     
     pData->masterOrder = order;
     
     free(Y_grid_N);
-    free(grid_x_axis);
-    free(grid_y_axis);
 }
 
 void powermap_initTFT

@@ -98,6 +98,7 @@ typedef struct _powermap
     float fs;                       /**< Host sample rate, in Hz*/
     
     /* internal */
+    int isFirstInit;            /**< Flag */
     float_complex Cx[HYBRID_BANDS][MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS];     /**< covariance matrices per band */
     int new_masterOrder;            /**< New maximum/master SH analysis order (current value will be replaced by this after next re-init) */
     int dispWidth;                  /**< Number of pixels on the horizontal in the 2D interpolated powermap image */

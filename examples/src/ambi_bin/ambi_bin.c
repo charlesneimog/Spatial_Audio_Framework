@@ -719,7 +719,7 @@ char* ambi_bin_getSofaFilePath(void* const hAmbi)
     if(pars->sofa_filepath!=NULL)
         return pars->sofa_filepath;
     else
-        return "no_file";
+        return "/Spatial_Audio_Framework/Default";
 }
 
 int ambi_bin_getChOrder(void* const hAmbi)
