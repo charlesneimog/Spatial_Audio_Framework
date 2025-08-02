@@ -203,7 +203,11 @@ void gcolFree(struct GCOL *gcol);
 int treeRead(struct READER *reader, struct DATAOBJECT *data);
 
 struct READER {
-  FILE *fhd;
+  FILE *fhd; //< file handler if file is used
+
+  const char *memory; //< memory buffer if memory shall be used
+  uint64_t memory_pos;
+  uint64_t memory_len;
 
   struct DATAOBJECT *all;
 
@@ -218,6 +222,12 @@ int validAddress(struct READER *reader, uint64_t address);
 uint64_t readValue(struct READER *reader, int size);
 
 int gunzip(int inlen, char *in, int *outlen, char *out);
+
+char *mysofa_strdup(const char *s);
+int mysofa_read(struct READER *reader, void *buf, size_t n);
+int mysofa_seek(struct READER *reader, long offset, int whence);
+long mysofa_tell(struct READER *reader);
+int mysofa_getc(struct READER *reader);
 
 #endif /* SAF_ENABLE_SOFA_READER_MODULE */
 

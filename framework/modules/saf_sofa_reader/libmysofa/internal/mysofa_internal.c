@@ -109,11 +109,6 @@ MYSOFA_EXPORT int mysofa_check(struct MYSOFA_HRTF *hrtf) {
       !verifyAttribute(hrtf->attributes, "DataType", "FIR"))
     return MYSOFA_INVALID_ATTRIBUTES; // LCOV_EXCL_LINE
 
-  if (!verifyAttribute(hrtf->attributes, "RoomType", "free field") &&
-      !verifyAttribute(hrtf->attributes, "RoomType", "reverberant") &&
-      !verifyAttribute(hrtf->attributes, "RoomType", "shoebox"))
-    return MYSOFA_INVALID_ATTRIBUTES; // LCOV_EXCL_LINE
-
   /*==============================================================================
    dimensions
    ==============================================================================
@@ -187,7 +182,7 @@ MYSOFA_EXPORT int mysofa_check(struct MYSOFA_HRTF *hrtf) {
   }
   /* TODO: Support different sampling rate per measurement, support default
    sampling rate of 48000 However, so far, I have not seen any sofa files with
-   an format other and I */
+   a format other then I */
   if (!verifyAttribute(hrtf->DataSamplingRate.attributes, "DIMENSION_LIST",
                        "I"))
     return MYSOFA_ONLY_THE_SAME_SAMPLING_RATE_SUPPORTED; // LCOV_EXCL_LINE
@@ -197,7 +192,10 @@ MYSOFA_EXPORT int mysofa_check(struct MYSOFA_HRTF *hrtf) {
     // do nothing
   } else if (verifyAttribute(hrtf->ReceiverPosition.attributes,
                              "DIMENSION_LIST", "R,C,M")) {
-    for (int i = 0; i < 6; i++) {
+    if (hrtf->ReceiverPosition.elements != hrtf->C * hrtf->R * hrtf->M)
+      return MYSOFA_INVALID_RECEIVER_POSITIONS;
+
+    for (int i = 0; i < (int)hrtf->C * (int)hrtf->R; i++) {
       int offset = i * hrtf->M;
       double receiverPosition = hrtf->ReceiverPosition.values[offset];
       for (int j = 1; j < (int)hrtf->M; j++)
@@ -212,15 +210,16 @@ MYSOFA_EXPORT int mysofa_check(struct MYSOFA_HRTF *hrtf) {
   if (!verifyAttribute(hrtf->ReceiverPosition.attributes, "Type", "cartesian"))
     return MYSOFA_RECEIVERS_WITH_CARTESIAN_SUPPORTED; // LCOV_EXCL_LINE
 
-  if (hrtf->ReceiverPosition.elements < 6 ||
-      !fequals(hrtf->ReceiverPosition.values[0], 0.f) ||
-      !fequals(hrtf->ReceiverPosition.values[2], 0.f) ||
-      !fequals(hrtf->ReceiverPosition.values[3], 0.f) ||
-      !fequals(hrtf->ReceiverPosition.values[5], 0.f)) {
+  if (hrtf->ReceiverPosition.elements < hrtf->C * hrtf->R ||
+      fabs(hrtf->ReceiverPosition.values[0]) >= 0.02f || // we assumes a somehow symetrical face
+      fabs(hrtf->ReceiverPosition.values[2]) >= 0.02f ||
+      fabs(hrtf->ReceiverPosition.values[3]) >= 0.02f ||
+      fabs(hrtf->ReceiverPosition.values[5]) >= 0.02f)
+  {
     return MYSOFA_INVALID_RECEIVER_POSITIONS; // LCOV_EXCL_LINE
   }
-  if (!fequals(hrtf->ReceiverPosition.values[4],
-               -hrtf->ReceiverPosition.values[1]))
+  if (fabs(hrtf->ReceiverPosition.values[4] +
+           hrtf->ReceiverPosition.values[1]) >= 0.02f)
     return MYSOFA_INVALID_RECEIVER_POSITIONS; // LCOV_EXCL_LINE
   if (hrtf->ReceiverPosition.values[1] < 0) {
     if (!verifyAttribute(hrtf->attributes, "APIName",
@@ -411,7 +410,7 @@ MYSOFA_EXPORT float mysofa_loudness(struct MYSOFA_HRTF *hrtf) {
   /*
    * find frontal source position
    */
-  for (i = 0; i < hrtf->SourcePosition.elements; i += hrtf->C) {
+  for (i = 0; i + 2 < hrtf->SourcePosition.elements; i += hrtf->C) {
     c[0] = hrtf->SourcePosition.values[i];
     c[1] = hrtf->SourcePosition.values[i + 1];
     c[2] = hrtf->SourcePosition.values[i + 2];
@@ -440,6 +439,7 @@ MYSOFA_EXPORT float mysofa_loudness(struct MYSOFA_HRTF *hrtf) {
 
   return factor;
 }
+
 
 /* ========================================================================== */
 /*                                 SPHERICAL                                  */
@@ -480,6 +480,7 @@ MYSOFA_EXPORT void mysofa_tocartesian(struct MYSOFA_HRTF *hrtf) {
   convertArray2(&hrtf->ReceiverPosition);
   convertArray2(&hrtf->SourcePosition);
 }
+
 
 /* ========================================================================== */
 /*                                NEIGHBORS                                   */
@@ -735,21 +736,21 @@ MYSOFA_EXPORT int mysofa_minphase(struct MYSOFA_HRTF *hrtf, float threshold) {
   return max;
 }
 
+
 /* ========================================================================== */
 /*                                 RESAMPLE                                   */
 /* ========================================================================== */
 
 MYSOFA_EXPORT int mysofa_resample(struct MYSOFA_HRTF *hrtf, float samplerate) {
-  unsigned int i;
-  int err;
+  int i, err;
   float factor;
   unsigned newN;
   float *values;
   SpeexResamplerState *resampler;
-  float *out;
   float zero[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-  if (hrtf->DataSamplingRate.elements != 1 || samplerate < 8000.)
+  if (hrtf->DataSamplingRate.elements != 1 || samplerate < 8000. ||
+      hrtf->DataIR.elements != hrtf->R * hrtf->M * hrtf->N)
     return MYSOFA_INVALID_FORMAT;
 
   if (samplerate == hrtf->DataSamplingRate.values[0])
@@ -761,38 +762,39 @@ MYSOFA_EXPORT int mysofa_resample(struct MYSOFA_HRTF *hrtf, float samplerate) {
   /*
    * resample FIR filter
    */
+
   values = malloc(newN * hrtf->R * hrtf->M * sizeof(float));
   if (values == NULL)
     return MYSOFA_NO_MEMORY;
 
-  resampler = speex__resampler_init(1, hrtf->DataSamplingRate.values[0],
+  resampler = speex_resampler_init(1, hrtf->DataSamplingRate.values[0],
                                    samplerate, 10, &err);
   if (resampler == NULL) {
     free(values);
     return err;
   }
 
-  out = malloc(sizeof(float) *
-               (newN + speex__resampler_get_output_latency(resampler)));
-  for (i = 0; i < hrtf->R * hrtf->M; i++) {
-    unsigned inlen = hrtf->N;
-    unsigned outlen = newN;
-    speex__resampler_reset_mem(resampler);
-    speex__resampler_skip_zeros(resampler);
-    speex__resampler_process_float(resampler, 0,
-                                  hrtf->DataIR.values + i * hrtf->N, &inlen,
-                                  values + i * newN, &outlen);
-    assert(inlen == hrtf->N);
-    while (outlen < newN) {
-      unsigned difflen = newN - outlen;
-      inlen = 10;
-      speex__resampler_process_float(resampler, 0, zero, &inlen,
-                                    values + i * newN + outlen, &difflen);
-      outlen += difflen;
+  if (hrtf->N) {
+    for (i = 0; i < (int)hrtf->R * (int)hrtf->M; i++) {
+      unsigned inlen = hrtf->N;
+      unsigned outlen = newN;
+      speex_resampler_reset_mem(resampler);
+      speex_resampler_skip_zeros(resampler);
+      speex_resampler_process_float(resampler, 0,
+                                    hrtf->DataIR.values + i * hrtf->N, &inlen,
+                                    values + i * newN, &outlen);
+      assert(inlen == hrtf->N);
+      while (outlen < newN) {
+        unsigned difflen = newN - outlen;
+        inlen = 10;
+        speex_resampler_process_float(resampler, 0, zero, &inlen,
+                                      values + i * newN + outlen, &difflen);
+        outlen += difflen;
+      }
+      assert(outlen == newN);
     }
   }
-  free(out);
-  speex__resampler_destroy(resampler);
+  speex_resampler_destroy(resampler);
 
   free(hrtf->DataIR.values);
   hrtf->DataIR.values = values;
@@ -801,7 +803,7 @@ MYSOFA_EXPORT int mysofa_resample(struct MYSOFA_HRTF *hrtf, float samplerate) {
   /*
    * update delay values
    */
-  for (i = 0; i < hrtf->DataDelay.elements; i++)
+  for (i = 0; i < (int)hrtf->DataDelay.elements; i++)
     hrtf->DataDelay.values[i] *= factor;
 
   /*
@@ -871,15 +873,15 @@ MYSOFA_EXPORT void mysofa_c2s(float values[3]) {
   theta = atan2f(z, sqrtf(x * x + y * y));
   phi = atan2f(y, x);
 
-  values[0] = fmodf(phi * (180.0 / SAF_PId) + 360, 360);
-  values[1] = theta * (180.0 / SAF_PId);
+  values[0] = fmodf(phi * (180 / M_PI) + 360, 360);
+  values[1] = theta * (180 / M_PI);
   values[2] = r;
 }
 
 MYSOFA_EXPORT void mysofa_s2c(float values[3]) {
   float x, r, theta, phi;
-  phi = values[0] * (SAF_PId / 180.0);
-  theta = values[1] * (SAF_PId / 180.0);
+  phi = values[0] * (M_PI / 180);
+  theta = values[1] * (M_PI / 180);
   r = values[2];
   x = cosf(theta) * r;
   values[2] = sinf(theta) * r;
@@ -980,7 +982,6 @@ void scaleArray(float *dst, int size, float w) {
     size--;
   }
 }
-
 float loudness(float *in, int size) {
   float res = 0;
   while (size > 0) {
@@ -990,6 +991,7 @@ float loudness(float *in, int size) {
   }
   return res;
 }
+
 
 #else
 extern int to_avoid_iso_compiler_warning_when_there_are_no_symbols;
