@@ -311,6 +311,8 @@ void latticeDecorrelator_destroy
         }
         free(h->lttc_apf);
 
+        free(h->in_energy);
+        free(h->decor_energy);
         free(h->delayBuffers);
         free(h->wIdx);
         free(h->rIdx);
