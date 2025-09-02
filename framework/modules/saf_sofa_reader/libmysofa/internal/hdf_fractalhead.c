@@ -365,8 +365,8 @@ static int directblockRead(struct READER *reader, struct DATAOBJECT *dataobject,
 
         if (readValue(reader, 3) != 0x000000) {
           mylog("FHDB type 3 unsupported values: 3bytes"); // LCOV_EXCL_LINE
-          free(name);                                      // LCOV_EXCL_LINE
-          return MYSOFA_UNSUPPORTED_FORMAT;                // LCOV_EXCL_LINE
+//          free(name);                                      // LCOV_EXCL_LINE
+//          return MYSOFA_UNSUPPORTED_FORMAT;                // LCOV_EXCL_LINE
         }
 
         len = (int)readValue(reader, 4);
