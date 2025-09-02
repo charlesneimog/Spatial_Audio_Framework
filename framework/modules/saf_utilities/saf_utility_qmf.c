@@ -288,8 +288,10 @@ void qmf_destroy
         /* For run-time */
         for(i=0; i<h->nCHin; i++)
             free(h->buffer_ana[i]);
+        free(h->buffer_ana);
         for(i=0; i<h->nCHout; i++)
             free(h->buffer_syn[i]);
+        free(h->buffer_syn);
         free(h->buffer_win);
         free(h->win_sum);
         free(h->win_sum_cmplx_dummy);
