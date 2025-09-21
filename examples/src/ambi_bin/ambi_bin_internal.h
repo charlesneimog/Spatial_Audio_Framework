@@ -77,6 +77,12 @@ extern "C" {
 # error "AMBI_BIN_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
+#if STD_ATOMICS_SUPPORTED
+  typedef _Atomic(AMBI_BIN_PREPROC) _Atomic_AMBI_BIN_PREPROC;
+#else
+  typedef AMBI_BIN_PREPROC _Atomic_AMBI_BIN_PREPROC;
+#endif
+
     
 /* ========================================================================== */
 /*                                 Structures                                 */
@@ -93,9 +99,9 @@ typedef struct _ambi_bin_codecPars
     char* sofa_filepath;    /**< absolute/relevative file path for a sofa file */
     float* hrirs;           /**< time domain HRIRs; FLAT: N_hrir_dirs x 2 x hrir_len */
     float* hrir_dirs_deg;   /**< directions of the HRIRs in degrees [azi elev]; FLAT: N_hrir_dirs x 2 */
-    int N_hrir_dirs;        /**< number of HRIR directions in the current sofa file */
-    int hrir_len;           /**< length of the HRIRs, this can be truncated, see "saf_sofa_reader.h" */
-    int hrir_fs;            /**< sampling rate of the HRIRs, should ideally match the host sampling rate, although not required */
+    _Atomic_INT32 N_hrir_dirs; /**< number of HRIR directions in the current sofa file */
+    _Atomic_INT32 hrir_len; /**< length of the HRIRs, this can be truncated, see "saf_sofa_reader.h" */
+    _Atomic_INT32 hrir_fs;  /**< sampling rate of the HRIRs, should ideally match the host sampling rate, although not required */
    
     /* hrtf filterbank coefficients */
     float* itds_s;          /**< interaural-time differences for each HRIR (in seconds); N_hrirs x 1 */
@@ -113,7 +119,7 @@ typedef struct _ambi_bin_codecPars
 typedef struct _ambi_bin
 {
     /* audio buffers + afSTFT time-frequency transform handle */
-    int fs;                         /**< host sampling rate */ 
+    _Atomic_INT32 fs;               /**< host sampling rate */ 
     float** SHFrameTD;              /**< Input spherical harmonic (SH) signals in the time-domain; #MAX_NUM_SH_SIGNALS x #AMBI_BIN_FRAME_SIZE */
     float** binFrameTD;             /**< Output binaural signals in the time-domain; #NUM_EARS x #AMBI_BIN_FRAME_SIZE */
     float_complex*** SHframeTF;     /**< Input spherical harmonic (SH) signals in the time-frequency domain; #HYBRID_BANDS x #MAX_NUM_SH_SIGNALS x #TIME_SLOTS */
@@ -123,40 +129,39 @@ typedef struct _ambi_bin
     float freqVector[HYBRID_BANDS]; /**< frequency vector for time-frequency transform, in Hz */
      
     /* our codec configuration */
-    CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus; /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;   /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;          /**< Current (re)initialisation step, string */
     ambi_bin_codecPars* pars;       /**< Decoding specific data */
     
     /* internal variables */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_PROC_STATUS procStatus; /**< see #PROC_STATUS */
     float_complex M_rot[MAX_NUM_SH_SIGNALS][MAX_NUM_SH_SIGNALS]; /**< Current SH rotation matrix */
-    int new_order;                  /**< new decoding order (current value will be replaced by this after next re-init) */
-    int nSH;                        /**< number of spherical harmonic signals */
+    _Atomic_INT32 new_order;        /**< new decoding order (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 nSH;              /**< number of spherical harmonic signals */
     
     /* flags */ 
-    int recalc_M_rotFLAG;           /**< 0: no init required, 1: init required */
-    int reinit_hrtfsFLAG;           /**< 0: no init required, 1: init required */
+    _Atomic_INT32 recalc_M_rotFLAG; /**< 0: no init required, 1: init required */
+    _Atomic_INT32 reinit_hrtfsFLAG; /**< 0: no init required, 1: init required */
     
     /* user parameters */
-    int order;                      /**< current decoding order */
-    int enableMaxRE;                /**< 0: disabled, 1: enabled */
-    int enableDiffuseMatching;      /**< 0: disabled, 1: enabled */
-    int enableTruncationEQ;         /**< 0: disabled, 1: enabled */
-    AMBI_BIN_DECODING_METHODS method; /**< current decoding method (see #AMBI_BIN_DECODING_METHODS) */
-    float EQ[HYBRID_BANDS];         /**< EQ curve */
-    int useDefaultHRIRsFLAG;        /**< 1: use default HRIRs in database, 0: use those from SOFA file */
-    AMBI_BIN_PREPROC preProc;       /**< HRIR pre-processing strategy */
-    CH_ORDER chOrdering;            /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                /**< Ambisonic normalisation convention (see #NORM_TYPES) */
-    int enableRotation;             /**< Whether rotation should be enabled (1) or disabled (0) */
-    float yaw;                      /**< yaw (Euler) rotation angle, in degrees */
-    float roll;                     /**< roll (Euler) rotation angle, in degrees */
-    float pitch;                    /**< pitch (Euler) rotation angle, in degrees */
-    int bFlipYaw;                   /**< flag to flip the sign of the yaw rotation angle */
-    int bFlipPitch;                 /**< flag to flip the sign of the pitch rotation angle */
-    int bFlipRoll;                  /**< flag to flip the sign of the roll rotation angle */
-    int useRollPitchYawFlag;        /**< rotation order flag, 1: r-p-y, 0: y-p-r */
+    _Atomic_INT32 order;            /**< current decoding order */
+    _Atomic_INT32 enableMaxRE;      /**< 0: disabled, 1: enabled */
+    _Atomic_INT32 enableDiffuseMatching; /**< 0: disabled, 1: enabled */
+    _Atomic_INT32 enableTruncationEQ;    /**< 0: disabled, 1: enabled */
+    AMBI_BIN_DECODING_METHODS method;  /**< current decoding method (see #AMBI_BIN_DECODING_METHODS) */
+    _Atomic_INT32 useDefaultHRIRsFLAG; /**< 1: use default HRIRs in database, 0: use those from SOFA file */
+    _Atomic_AMBI_BIN_PREPROC preProc; /**< HRIR pre-processing strategy */
+    _Atomic_CH_ORDER chOrdering;    /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;        /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_INT32 enableRotation;   /**< Whether rotation should be enabled (1) or disabled (0) */
+    _Atomic_FLOAT32 yaw;            /**< yaw (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 roll;           /**< roll (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 pitch;          /**< pitch (Euler) rotation angle, in degrees */
+    _Atomic_INT32 bFlipYaw;         /**< flag to flip the sign of the yaw rotation angle */
+    _Atomic_INT32 bFlipPitch;       /**< flag to flip the sign of the pitch rotation angle */
+    _Atomic_INT32 bFlipRoll;        /**< flag to flip the sign of the roll rotation angle */
+    _Atomic_INT32 useRollPitchYawFlag; /**< rotation order flag, 1: r-p-y, 0: y-p-r */
     
 } ambi_bin_data;
 

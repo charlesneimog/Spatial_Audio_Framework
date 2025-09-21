@@ -30,6 +30,19 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#if defined(_MSC_VER)
+  #if _MSC_VER >= 1936 && defined(__STDC_VERSION__) && __STDC_VERSION__ < 201112L
+    #pragma message("WARNING: The MSVC C compiler only has \"experimental\" Atomic support") /* although, seems to be fine... */
+    #define STD_ATOMICS_SUPPORTED ( 1 )
+  #else
+    #pragma message("WARNING: Atomics require C11 and are not supported by the MSVC C compiler pre _MSC_VER=1936")
+    #define STD_ATOMICS_SUPPORTED ( 0 )
+  #endif
+#else
+  #define STD_ATOMICS_SUPPORTED ( 1 )
+  #include <stdatomic.h>
+#endif
+
 /* ========================================================================== */
 /*                             Presets + Constants                            */
 /* ========================================================================== */
@@ -237,6 +250,24 @@ typedef enum {
 
 /** Maximum number of spherical harmonic components/signals supported */
 #define MAX_NUM_SH_SIGNALS ( MAX_NUM_CHANNELS )
+
+#if STD_ATOMICS_SUPPORTED
+  typedef _Atomic(float) _Atomic_FLOAT32;
+  typedef _Atomic(int)   _Atomic_INT32;
+
+  typedef _Atomic(CH_ORDER) _Atomic_CH_ORDER;
+  typedef _Atomic(NORM_TYPES) _Atomic_NORM_TYPES;
+  typedef _Atomic(CODEC_STATUS) _Atomic_CODEC_STATUS;
+  typedef _Atomic(PROC_STATUS) _Atomic_PROC_STATUS;
+#else
+  typedef float _Atomic_FLOAT32;
+  typedef int   _Atomic_INT32;
+
+  typedef CH_ORDER _Atomic_CH_ORDER;
+  typedef NORM_TYPES _Atomic_NORM_TYPES;
+  typedef CODEC_STATUS _Atomic_CODEC_STATUS;
+  typedef PROC_STATUS _Atomic_PROC_STATUS;
+#endif
 
 
 #ifdef __cplusplus
