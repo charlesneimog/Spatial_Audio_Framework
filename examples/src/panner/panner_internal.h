@@ -101,13 +101,13 @@ typedef struct _panner
     float_complex G_src[HYBRID_BANDS][MAX_NUM_INPUTS][MAX_NUM_OUTPUTS];  /**< Current VBAP gains per source */
     
     /* flags */
-    CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
+    _Atomic_PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;         /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;          /**< Current (re)initialisation step, string */
-    int recalc_gainsFLAG[MAX_NUM_INPUTS]; /**< 1: VBAP gains need to be recalculated for this source, 0: do not */
-    int recalc_M_rotFLAG;           /**< 1: recalculate the rotation matrix, 0: do not */
-    int reInitGainTables;           /**< 1: reinitialise the VBAP gain table, 0: do not */
+    _Atomic_INT32 recalc_gainsFLAG[MAX_NUM_INPUTS]; /**< 1: VBAP gains need to be recalculated for this source, 0: do not */
+    _Atomic_INT32 recalc_M_rotFLAG;         /**< 1: recalculate the rotation matrix, 0: do not */
+    _Atomic_INT32 reInitGainTables;         /**< 1: reinitialise the VBAP gain table, 0: do not */
     
     /* misc. */
     float src_dirs_rot_deg[MAX_NUM_INPUTS][2]; /**< Intermediate rotated source directions, in degrees */
@@ -115,25 +115,25 @@ typedef struct _panner
     float src_dirs_xyz[MAX_NUM_INPUTS][3];     /**< Intermediate source directions, as unit-length Cartesian coordinates */
     int nTriangles;                 /**< Number of loudspeaker triangles */
     int output_nDims;               /**< Dimensionality of the loudspeaker array, 2: 2-D, 3: 3-D */
-    int new_nLoudpkrs;              /**< New number of loudspeakers in the array */
-    int new_nSources;               /**< New number of inputs/sources */
+    _Atomic_INT32 new_nLoudpkrs;              /**< New number of loudspeakers in the array */
+    _Atomic_INT32 new_nSources;               /**< New number of inputs/sources */
     
     /* pValue */
     float pValue[HYBRID_BANDS];     /**< Used for the frequency-dependent panning normalisation */
     
     /* user parameters */
-    int nSources;                   /**< Current number of inputs/sources */
-    float src_dirs_deg[MAX_NUM_INPUTS][2]; /**< Current source directions */
-    float DTT;                      /**< Room coefficient [3] */
-    float spread_deg;               /**< Source spread/MDAP [2] */
-    int nLoudpkrs;                  /**< Current number of loudspeakers in the array */
-    float loudpkrs_dirs_deg[MAX_NUM_OUTPUTS][2]; /**< Current loudspeaker directions */
-    float yaw;                      /**< yaw (Euler) rotation angle, in degrees */
-    float roll;                     /**< roll (Euler) rotation angle, in degrees */
-    float pitch;                    /**< pitch (Euler) rotation angle, in degrees */
-    int bFlipYaw;                   /**< flag to flip the sign of the yaw rotation angle */
-    int bFlipPitch;                 /**< flag to flip the sign of the pitch rotation angle */
-    int bFlipRoll;                  /**< flag to flip the sign of the roll rotation angle */
+    _Atomic_INT32 nSources;                   /**< Current number of inputs/sources */
+    _Atomic_FLOAT32 src_dirs_deg[MAX_NUM_INPUTS][2]; /**< Current source directions */
+    _Atomic_FLOAT32 DTT;                      /**< Room coefficient [3] */
+    _Atomic_FLOAT32 spread_deg;               /**< Source spread/MDAP [2] */
+    _Atomic_INT32 nLoudpkrs;                  /**< Current number of loudspeakers in the array */
+    _Atomic_FLOAT32 loudpkrs_dirs_deg[MAX_NUM_OUTPUTS][2]; /**< Current loudspeaker directions */
+    _Atomic_FLOAT32 yaw;                      /**< yaw (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 roll;                     /**< roll (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 pitch;                    /**< pitch (Euler) rotation angle, in degrees */
+    _Atomic_INT32 bFlipYaw;                   /**< flag to flip the sign of the yaw rotation angle */
+    _Atomic_INT32 bFlipPitch;                 /**< flag to flip the sign of the pitch rotation angle */
+    _Atomic_INT32 bFlipRoll;                  /**< flag to flip the sign of the roll rotation angle */
     
 } panner_data;
      
@@ -168,8 +168,8 @@ void panner_initTFT(void* const hPan);
  * @param[out] nDims    (&) estimate of the number of dimensions (2 or 3)
  */
 void panner_loadSourcePreset(SOURCE_CONFIG_PRESETS preset,
-                             float dirs_deg[MAX_NUM_INPUTS][2],
-                             int* newNCH,
+                             _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+                             _Atomic_INT32* newNCH,
                              int* nDims);
 
 /**
@@ -181,8 +181,8 @@ void panner_loadSourcePreset(SOURCE_CONFIG_PRESETS preset,
  * @param[out] nDims    (&) estimate of the number of dimensions (2 or 3)
  */
 void panner_loadLoudspeakerPreset(LOUDSPEAKER_ARRAY_PRESETS preset,
-                                  float dirs_deg[MAX_NUM_INPUTS][2],
-                                  int* newNCH,
+                                  _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+                                  _Atomic_INT32* newNCH,
                                   int* nDims);
 
 

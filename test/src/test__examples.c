@@ -358,7 +358,7 @@ void test__saf_example_array2sh(void){
 }
 
 void test__saf_example_rotator(void){
-    int ch, nSH, i, j, delay, framesize;
+    int ch, nSH, i, j, framesize;
     void* hRot;
     float direction_deg[2], ypr[3], Rzyx[3][3];
     float** inSig, *y, **shSig_frame, **shSig_rot_frame;
@@ -374,7 +374,7 @@ void test__saf_example_rotator(void){
     ypr[0] = -0.4f;
     ypr[1] = -1.4f;
     ypr[2] = 2.1f;
-    delay = rotator_getProcessingDelay();
+    //delay = rotator_getProcessingDelay();
 
     /* Create and initialise an instance of rotator */
     rotator_create(&hRot);

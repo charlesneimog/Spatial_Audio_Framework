@@ -79,19 +79,19 @@ typedef struct _decorrelator
     /* our codec configuration */
     void* hDecor;                     /**< Decorrelator handle */
     void* hDucker;                    /**< Transient extractor/Ducker handle */
-    CODEC_STATUS codecStatus;         /**< see #CODEC_STATUS */
-    float progressBar0_1;             /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus; /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;   /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;            /**< Current (re)initialisation step, string */
     
     /* internal variables */
-    PROC_STATUS procStatus;           /**< see #PROC_STATUS */
-    int new_nChannels;                /**< New number of input/output channels (current value will be replaced by this after next re-init) */
+    _Atomic_PROC_STATUS procStatus;       /**< see #PROC_STATUS */
+    _Atomic_INT32 new_nChannels;          /**< New number of input/output channels (current value will be replaced by this after next re-init) */
 
     /* user parameters */
-    int nChannels;                    /**< Current number of input/output channels */
-    int enableTransientDucker;        /**< 1: transient extractor is enabled, 0: disabled */
-    float decorAmount;                /**< The mix between decorrelated signals and the input signals [0..1], 1: fully decorrelated 0: bypassed */
-    int compensateLevel;              /**< 1: apply a sqrt(nChannels)/nChannels scaling on the output signals, 0: disabled */
+    _Atomic_INT32 nChannels;              /**< Current number of input/output channels */
+    _Atomic_INT32 enableTransientDucker;  /**< 1: transient extractor is enabled, 0: disabled */
+    _Atomic_FLOAT32 decorAmount;          /**< The mix between decorrelated signals and the input signals [0..1], 1: fully decorrelated 0: bypassed */
+    _Atomic_INT32 compensateLevel;        /**< 1: apply a sqrt(nChannels)/nChannels scaling on the output signals, 0: disabled */
     
 } decorrelator_data;
 

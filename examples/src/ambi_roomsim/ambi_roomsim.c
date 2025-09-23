@@ -124,7 +124,7 @@ void ambi_roomsim_process
     /* Reinitialise room if needed */
     if(pData->reinit_room){
         ims_shoebox_destroy(&(pData->hIms));
-        ims_shoebox_create(&(pData->hIms), pData->room_dims, (float*)pData->abs_wall, 250.0f, 1, 343.0f, pData->fs);
+        ims_shoebox_create(&(pData->hIms), (float*)pData->room_dims, (float*)pData->abs_wall, 250.0f, 1, 343.0f, pData->fs);
         for(i=0; i<pData->new_nSources; i++) /* re-add source objects... */
             pData->sourceIDs[i] = ims_shoebox_addSource(pData->hIms, (float*)pData->src_pos[i], &(pData->src_sigs[i]));
         for(i=0; i<pData->new_nReceivers; i++) /* re-add receiver objects... */
@@ -181,7 +181,7 @@ void ambi_roomsim_process
         for(i=0; i<nReceivers; i++)
             ims_shoebox_updateReceiver(pData->hIms, pData->receiverIDs[i], pData->rec_pos[i]);
         ims_shoebox_setRoomDimensions(pData->hIms, pData->room_dims);
-        ims_shoebox_setWallAbsCoeffs(pData->hIms, (float*)pData->abs_wall);
+        ims_shoebox_setWallAbsCoeffs(pData->hIms, (_Atomic_FLOAT32*)pData->abs_wall);
         ims_shoebox_computeEchograms(pData->hIms, pData->enableReflections ? pData->refl_order : 0, maxTime_s);
 
         /* Render audio for each receiver */

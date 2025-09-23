@@ -96,7 +96,7 @@ void ambi_enc_process
 {
     ambi_enc_data *pData = (ambi_enc_data*)(hAmbi);
     int i, j, ch, nSources, nSH, mixWithPreviousFLAG;
-    float src_dirs[MAX_NUM_INPUTS][2], scale;
+    float temp_dir[2], src_dirs[MAX_NUM_INPUTS][2], scale, temp_gain;
     float Y_src[MAX_NUM_SH_SIGNALS];
 
     /* local copies of user parameters */
@@ -122,7 +122,9 @@ void ambi_enc_process
         mixWithPreviousFLAG = 0;
         for(ch=0; ch<nSources; ch++){
             if(pData->recalc_SH_FLAG[ch]){
-                getRSH_recur(order, pData->src_dirs_deg[ch], 1, (float*)Y_src);
+                temp_dir[0] = pData->src_dirs_deg[ch][0];
+                temp_dir[1] = pData->src_dirs_deg[ch][1];
+                getRSH_recur(order, temp_dir, 1, (float*)Y_src);
                 for(j=0; j<nSH; j++)
                     pData->Y[j][ch] = Y_src[j];
                 for(; j<MAX_NUM_SH_SIGNALS; j++)
@@ -133,8 +135,10 @@ void ambi_enc_process
                 mixWithPreviousFLAG = 1;
             }
             /* Apply source gains */
-            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f)
-                utility_svsmul(pData->inputFrameTD[ch], &(pData->src_gains[ch]), AMBI_ENC_FRAME_SIZE, NULL);
+            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f){
+                temp_gain = pData->src_gains[ch];
+                utility_svsmul(pData->inputFrameTD[ch], &temp_gain, AMBI_ENC_FRAME_SIZE, NULL);
+            }
         }
 
         /* spatially encode the input signals into spherical harmonic signals */

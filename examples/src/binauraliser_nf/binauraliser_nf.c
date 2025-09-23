@@ -133,7 +133,10 @@ void binauraliserNF_create /* FREQUENCY DOMAIN version */
     }
     pData->recalc_M_rotFLAG = 1;
     
-    pData->src_dirs_cur = pData->src_dirs_deg;
+    for(int ch = 0; ch < MAX_NUM_INPUTS; ch++) {
+        pData->src_dirs_cur[ch][0] = pData->src_dirs_deg[ch][0];
+        pData->src_dirs_cur[ch][1] = pData->src_dirs_deg[ch][1];
+    }
 }
 
 void binauraliserNF_destroy
@@ -235,7 +238,7 @@ void binauraliserNF_process /* FREQ DOMAIN version */
 {
     binauraliserNF_data *pData = (binauraliserNF_data*)(hBin);
     int ch, ear, i, band, nSources, enableRotation;
-    float hypotxy, headRadiusRecip, fs, ffThresh, rho;
+    float hypotxy, headRadiusRecip, fs, ffThresh, rho, temp_gain;
     float Rxyz[3][3];
     float alphaLR[2] = { 0.0, 0.0 };
 
@@ -247,7 +250,7 @@ void binauraliserNF_process /* FREQ DOMAIN version */
     fs              = (float)pData->fs;
 
     /* apply binaural panner */
-    if ((nSamples == BINAURALISER_FRAME_SIZE) && (pData->hrtf_fb!=NULL) && (pData->codecStatus==CODEC_STATUS_INITIALISED) ) {
+    if ((nSamples == BINAURALISER_FRAME_SIZE) && (pData->codecStatus==CODEC_STATUS_INITIALISED) && (pData->hrtf_fb!=NULL)) {
         pData->procStatus = PROC_STATUS_ONGOING;
 
         /* Load time-domain data */
@@ -258,8 +261,10 @@ void binauraliserNF_process /* FREQ DOMAIN version */
         
         /* Apply source gains */
         for (ch = 0; ch < nSources; ch++) {
-            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f)
-                utility_svsmul(pData->inputFrameTD[ch], &(pData->src_gains[ch]), BINAURALISER_FRAME_SIZE, NULL);
+            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f){
+                temp_gain = pData->src_gains[ch];
+                utility_svsmul(pData->inputFrameTD[ch], &temp_gain, BINAURALISER_FRAME_SIZE, NULL);
+            }
         }
         
         /* Apply time-frequency transform (TFT) */
@@ -294,9 +299,11 @@ void binauraliserNF_process /* FREQ DOMAIN version */
             /* Interpolate HRTFs */
             if (pData->recalc_hrtf_interpFLAG[ch]) {
                 if (enableRotation) {
-                    pData->src_dirs_cur = pData->src_dirs_rot_deg;
+                    pData->src_dirs_cur[ch][0] = pData->src_dirs_rot_deg[ch][0];
+                    pData->src_dirs_cur[ch][1] = pData->src_dirs_rot_deg[ch][1];
                 } else {
-                    pData->src_dirs_cur = pData->src_dirs_deg;
+                    pData->src_dirs_cur[ch][0] = pData->src_dirs_deg[ch][0];
+                    pData->src_dirs_cur[ch][1] = pData->src_dirs_deg[ch][1];
                 }
                 binauraliser_interpHRTFs(hBin, pData->interpMode, pData->src_dirs_cur[ch][0], pData->src_dirs_cur[ch][1], pData->hrtf_interp[ch]);
                 pData->recalc_hrtf_interpFLAG[ch] = 0;

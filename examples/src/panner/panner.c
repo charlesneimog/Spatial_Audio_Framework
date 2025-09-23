@@ -127,10 +127,12 @@ void panner_init
     
     /* define frequency vector */
     pData->fs = sampleRate;
-    afSTFT_getCentreFreqs(pData->hSTFT, (float)sampleRate, HYBRID_BANDS, pData->freqVector);
-    
-    /* calculate pValue per frequency */
-    getPvalues(pData->DTT, pData->freqVector, HYBRID_BANDS, pData->pValue);
+    if (pData->codecStatus == CODEC_STATUS_INITIALISED){
+        afSTFT_getCentreFreqs(pData->hSTFT, (float)sampleRate, HYBRID_BANDS, pData->freqVector);
+        
+        /* calculate pValue per frequency */
+        getPvalues(pData->DTT, pData->freqVector, HYBRID_BANDS, pData->pValue);
+    }
 
     /* reinitialise if needed */
     pData->recalc_M_rotFLAG = 1;
@@ -154,7 +156,7 @@ void panner_initCodec
     /* for progress bar */
     pData->codecStatus = CODEC_STATUS_INITIALISING;
     strcpy(pData->progressBarText,"Initialising");
-    pData->progressBar0_1 = 0.0f;
+    pData->progressBar0_1 = 0.4f;
     
     /* reinit TFT if needed */
     panner_initTFT(hPan);
@@ -196,7 +198,7 @@ void panner_process
     nLoudspeakers = pData->nLoudpkrs;
 
     /* apply panner */
-    if ((nSamples == PANNER_FRAME_SIZE) && (pData->vbap_gtable != NULL) && (pData->codecStatus == CODEC_STATUS_INITIALISED) ) {
+    if ((nSamples == PANNER_FRAME_SIZE) && (pData->codecStatus == CODEC_STATUS_INITIALISED)  && (pData->vbap_gtable != NULL) ) {
         pData->procStatus = PROC_STATUS_ONGOING;
 
         /* Load time-domain data */

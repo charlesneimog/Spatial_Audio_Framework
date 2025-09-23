@@ -77,6 +77,14 @@ extern "C" {
 # error "AMBI_DEC_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(AMBI_DEC_DECODING_METHODS) _Atomic_AMBI_DEC_DECODING_METHODS;
+  typedef _Atomic(AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH) _Atomic_AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH;
+#else
+  typedef AMBI_DEC_DECODING_METHODS _Atomic_AMBI_DEC_DECODING_METHODS;
+  typedef AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH _Atomic_AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -98,9 +106,9 @@ typedef struct _ambi_dec_codecPars
     char* sofa_filepath;                        /**< absolute/relevative file path for a sofa file */
     float* hrirs;                               /**< time domain HRIRs; N_hrir_dirs x 2 x hrir_len */
     float* hrir_dirs_deg;                       /**< directions of the HRIRs in degrees [azi elev]; N_hrir_dirs x 2 */
-    int N_hrir_dirs;                            /**< number of HRIR directions in the current sofa file */
-    int hrir_len;                               /**< length of the HRIRs, this can be truncated, see "saf_sofa_reader.h" */
-    int hrir_fs;                                /**< sampling rate of the HRIRs, should ideally match the host sampling rate, although not required */
+    _Atomic_INT32 N_hrir_dirs;                  /**< number of HRIR directions in the current sofa file */
+    _Atomic_INT32 hrir_len;                     /**< length of the HRIRs, this can be truncated, see "saf_sofa_reader.h" */
+    _Atomic_INT32 hrir_fs;                      /**< sampling rate of the HRIRs, should ideally match the host sampling rate, although not required */
     
     /* vbap gain table for panning the HRIRs */
     int hrtf_vbapTableRes[2];                   /**< [azi elev] step sizes in degrees */
@@ -134,40 +142,40 @@ typedef struct _ambi_dec
     float_complex*** binframeTF;         /**< Output binaural signals in the time-frequency domain; #HYBRID_BANDS x #NUM_EARS x #TIME_SLOTS */
     void* hSTFT;                         /**< afSTFT handle */
     int afSTFTdelay;                     /**< for host delay compensation */ 
-    int fs;                              /**< host sampling rate */
+    _Atomic_INT32 fs;                    /**< host sampling rate */
     float freqVector[HYBRID_BANDS];      /**< frequency vector for time-frequency transform, in Hz */
     
     /* our codec configuration */
-    CODEC_STATUS codecStatus;            /**< see #CODEC_STATUS */
-    float progressBar0_1;                /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus;    /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;      /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;               /**< Current (re)initialisation step, string */
     ambi_dec_codecPars* pars;            /**< codec parameters */
     
     /* internal variables */
-    int loudpkrs_nDims;                  /**< dimensionality of the current loudspeaker set-up */
-    int new_nLoudpkrs;                   /**< if new_nLoudpkrs != nLoudpkrs, afSTFT is reinitialised  (current value will be replaced by this after next re-init) */
-    int new_binauraliseLS;               /**< if new_binauraliseLS != binauraliseLS, ambi_dec is reinitialised (current value will be replaced by this after next re-init) */
-    int new_masterOrder;                 /**< if new_masterOrder != masterOrder, ambi_dec is reinitialised (current value will be replaced by this after next re-init) */
+    int loudpkrs_nDims;                            /**< dimensionality of the current loudspeaker set-up */
+    _Atomic_INT32 new_nLoudpkrs;                   /**< if new_nLoudpkrs != nLoudpkrs, afSTFT is reinitialised  (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 new_binauraliseLS;               /**< if new_binauraliseLS != binauraliseLS, ambi_dec is reinitialised (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 new_masterOrder;                 /**< if new_masterOrder != masterOrder, ambi_dec is reinitialised (current value will be replaced by this after next re-init) */
     
     /* flags */
-    PROC_STATUS procStatus;              /**< see #PROC_STATUS */
-    int reinit_hrtfsFLAG;                /**< 0: no init required, 1: init required */
-    int recalc_hrtf_interpFLAG[MAX_NUM_LOUDSPEAKERS]; /**< 0: no init required, 1: init required */
+    _Atomic_PROC_STATUS procStatus;                /**< see #PROC_STATUS */
+    _Atomic_INT32 reinit_hrtfsFLAG;                /**< 0: no init required, 1: init required */
+    _Atomic_INT32 recalc_hrtf_interpFLAG[MAX_NUM_LOUDSPEAKERS]; /**< 0: no init required, 1: init required */
     
     /* user parameters */
-    int masterOrder;                     /**< Current maximum/master decoding order */
-    int orderPerBand[HYBRID_BANDS];      /**< Ambisonic decoding order per frequency band 1..SH_ORDER */
-    AMBI_DEC_DECODING_METHODS dec_method[NUM_DECODERS]; /**< decoding methods for each decoder, see #AMBI_DEC_DECODING_METHODS enum */
-    int rE_WEIGHT[NUM_DECODERS];         /**< 0:disabled, 1: enable max_rE weight */
-    AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH diffEQmode[NUM_DECODERS]; /**< diffuse-field EQ approach; see #AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH enum */
-    float transitionFreq;                /**< transition frequency for the 2 decoders, in Hz */
-    int nLoudpkrs;                       /**< number of loudspeakers/virtual loudspeakers */
-    float loudpkrs_dirs_deg[MAX_NUM_LOUDSPEAKERS][NUM_DECODERS]; /**< loudspeaker directions in degrees [azi, elev] */
-    int useDefaultHRIRsFLAG;             /**< 1: use default HRIRs in database, 0: use those from SOFA file */
-    int enableHRIRsPreProc;              /**< flag to apply pre-processing to the currently loaded HRTFs */
-    int binauraliseLS;                   /**< 1: convolve loudspeaker signals with HRTFs, 0: output loudspeaker signals */
-    CH_ORDER chOrdering;                 /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                     /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_INT32 masterOrder;                     /**< Current maximum/master decoding order */
+    _Atomic_INT32 orderPerBand[HYBRID_BANDS];      /**< Ambisonic decoding order per frequency band 1..SH_ORDER */
+    _Atomic_AMBI_DEC_DECODING_METHODS dec_method[NUM_DECODERS]; /**< decoding methods for each decoder, see #AMBI_DEC_DECODING_METHODS enum */
+    _Atomic_INT32 rE_WEIGHT[NUM_DECODERS];         /**< 0:disabled, 1: enable max_rE weight */
+    _Atomic_AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH diffEQmode[NUM_DECODERS]; /**< diffuse-field EQ approach; see #AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH enum */
+    _Atomic_FLOAT32 transitionFreq;                /**< transition frequency for the 2 decoders, in Hz */
+    _Atomic_INT32 nLoudpkrs;                       /**< number of loudspeakers/virtual loudspeakers */
+    _Atomic_FLOAT32 loudpkrs_dirs_deg[MAX_NUM_LOUDSPEAKERS][2]; /**< loudspeaker directions in degrees [azi, elev] */
+    _Atomic_INT32 useDefaultHRIRsFLAG;             /**< 1: use default HRIRs in database, 0: use those from SOFA file */
+    _Atomic_INT32 enableHRIRsPreProc;              /**< flag to apply pre-processing to the currently loaded HRTFs */
+    _Atomic_INT32 binauraliseLS;                   /**< 1: convolve loudspeaker signals with HRTFs, 0: output loudspeaker signals */
+    _Atomic_CH_ORDER chOrdering;                   /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                       /**< Ambisonic normalisation convention (see #NORM_TYPES) */
     
 } ambi_dec_data;
 
@@ -216,8 +224,8 @@ void ambi_dec_interpHRTFs(void* const hAmbi,
  * @param[out] nDims    (&) number of dimensions (2 or 3)
  */
 void loadLoudspeakerArrayPreset(LOUDSPEAKER_ARRAY_PRESETS preset,
-                                float dirs_deg[MAX_NUM_LOUDSPEAKERS][2],
-                                int* nCH,
+                                _Atomic_FLOAT32 dirs_deg[MAX_NUM_LOUDSPEAKERS][2],
+                                _Atomic_INT32* nCH,
                                 int* nDims);
 
 

@@ -61,15 +61,15 @@ typedef struct _multiconv
     int hostBlockSize;     /**< current host block size */
     int hostBlockSize_clamped; /**< Clamped between #MIN_FRAME_SIZE and #MAX_FRAME_SIZE */
     float* filters;        /**< FLAT: nfilters x filter_length */
-    int nfilters;          /**< Current number of FIR filters */
-    int filter_length;     /**< length of the filters (input_wav_length/nInputChannels) */
+    _Atomic_INT32 nfilters;        /**< Current number of FIR filters */
+    _Atomic_INT32 filter_length;   /**< length of the filters (input_wav_length/nInputChannels) */
     int filter_fs;         /**< current samplerate of the filters */
     int host_fs;           /**< current samplerate of the host */
-    int reInitFilters;     /**< FLAG: 0: do not reinit, 1: reinit, 2: reinit in progress */
+    _Atomic_INT32 reInitFilters;   /**< FLAG: 0: do not reinit, 1: reinit, 2: reinit in progress */
     
     /* user parameters */
-    int nChannels;         /**< Current number of input/output channels */
-    int enablePartitionedConv; /**< 1: enable partitioned convolution, 0: regular convolution (fft over the length of the filter) */
+    _Atomic_INT32 nChannels;             /**< Current number of input/output channels */
+    _Atomic_INT32 enablePartitionedConv; /**< 1: enable partitioned convolution, 0: regular convolution (fft over the length of the filter) */
     
 } multiconv_data;
 

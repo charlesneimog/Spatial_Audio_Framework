@@ -117,8 +117,8 @@ void ambi_dec_interpHRTFs
 void loadLoudspeakerArrayPreset
 (
     LOUDSPEAKER_ARRAY_PRESETS preset,
-    float dirs_deg[MAX_NUM_LOUDSPEAKERS][2],
-    int* newNCH,
+    _Atomic_FLOAT32 dirs_deg[MAX_NUM_LOUDSPEAKERS][2],
+    _Atomic_INT32* newNCH,
     int* nDims
 )
 {
@@ -311,7 +311,7 @@ void loadLoudspeakerArrayPreset
      * (Fails if using 2D setups are not on the horizontal plane ) */
     sum_elev = 0.0f;
     for(i=0; i<nCH; i++)
-        sum_elev += fabsf(dirs_deg[i][1]);
+        sum_elev += fabsf((float)dirs_deg[i][1]);
     if(sum_elev < 0.01f)
         (*nDims) = 2;
     else

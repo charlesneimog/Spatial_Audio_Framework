@@ -34,6 +34,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include "../saf_utilities/saf_utilities.h"
+
 /* ========================================================================== */
 /*                         IMS Shoebox Room Simulator                         */
 /* ========================================================================== */
@@ -173,11 +175,11 @@ void ims_shoebox_applyEchogramTD(/* Input Arguments */
 
 /** Sets new room dimensions */
 void ims_shoebox_setRoomDimensions(void* hIms,
-                                   float new_roomDimensions[3]);
+                                   _Atomic_FLOAT32 new_roomDimensions[3]);
 
 /** Sets new wall absorption coefficients per wall and per band */
 void ims_shoebox_setWallAbsCoeffs(void* hIms,
-                                  float* abs_wall);
+                                  _Atomic_FLOAT32* abs_wall);
 
 
 /* ================== Add/Remove/Update Objects functions ==================== */
@@ -229,12 +231,12 @@ int ims_shoebox_addReceiverSH(void* hIms,
 /** Updates the position of a specific source in the simulation */
 void ims_shoebox_updateSource(void* hIms,
                               int sourceID,
-                              float position_xyz[3]);
+                              _Atomic_FLOAT32 position_xyz[3]);
 
 /** Updates the position of a specific receiver in the simulation */
 void ims_shoebox_updateReceiver(void* hIms,
                                 int receiverID,
-                                float position_xyz[3]);
+                                _Atomic_FLOAT32 position_xyz[3]);
 
 /**
  * Removes a specific source from the simulation

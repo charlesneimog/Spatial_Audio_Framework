@@ -71,15 +71,15 @@ typedef struct _beamformer
     float prev_beamWeights[MAX_NUM_BEAMS][MAX_NUM_SH_SIGNALS]; /**< Previous beamforming weights */
     float interpolator_fadeIn[BEAMFORMER_FRAME_SIZE];   /**< Linear Interpolator (fade-in) */
     float interpolator_fadeOut[BEAMFORMER_FRAME_SIZE];  /**< Linear Interpolator (fade-out) */
-    int recalc_beamWeights[MAX_NUM_BEAMS];              /**< 0: no init required, 1: init required */
+    _Atomic_INT32 recalc_beamWeights[MAX_NUM_BEAMS];    /**< 0: no init required, 1: init required */
     
     /* user parameters */
-    int beamOrder;                           /**< beam order */
-    int nBeams;                              /**< number of loudspeakers/virtual loudspeakers */
-    float beam_dirs_deg[MAX_NUM_BEAMS][2];   /**< beam directions in degrees [azi, elev] */
-    STATIC_BEAM_TYPES beamType;              /**< see #STATIC_BEAM_TYPES enum */
-    CH_ORDER chOrdering;                     /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                         /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_INT32 beamOrder;                           /**< beam order */
+    _Atomic_INT32 nBeams;                              /**< number of loudspeakers/virtual loudspeakers */
+    _Atomic_FLOAT32 beam_dirs_deg[MAX_NUM_BEAMS][2];   /**< beam directions in degrees [azi, elev] */
+    _Atomic_STATIC_BEAM_TYPES beamType;                /**< see #STATIC_BEAM_TYPES enum */
+    _Atomic_CH_ORDER chOrdering;                       /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                           /**< Ambisonic normalisation convention (see #NORM_TYPES) */
     
 } beamformer_data;
 

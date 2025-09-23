@@ -102,6 +102,7 @@ void array2sh_calculate_sht_matrix
     int i, j, band, n, order, nSH;
     double alpha, beta, g_lim, regPar;
     double kr[HYBRID_BANDS], kR[HYBRID_BANDS];
+    float sensorCoords_deg_local[MAX_NUM_SENSORS][2];
     float* Y_mic, *pinv_Y_mic;
     float_complex* pinv_Y_mic_cmplx, *diag_bN_inv_R;
     const float_complex calpha = cmplxf(1.0f, 0.0f); const float_complex cbeta  = cmplxf(0.0f, 0.0f);
@@ -114,10 +115,14 @@ void array2sh_calculate_sht_matrix
         kr[band] = 2.0*SAF_PId*(pData->freqVector[band])*(arraySpecs->r)/pData->c;
         kR[band] = 2.0*SAF_PId*(pData->freqVector[band])*(arraySpecs->R)/pData->c;
     }
+    for(i=0; i<arraySpecs->Q; i++){
+        sensorCoords_deg_local[i][0] = arraySpecs->sensorCoords_deg[i][0];
+        sensorCoords_deg_local[i][1] = arraySpecs->sensorCoords_deg[i][1];
+    }
     
     /* Spherical harmponic weights for each sensor direction */
     Y_mic = malloc1d(nSH*(arraySpecs->Q)*sizeof(float));
-    getRSH(order, (float*)arraySpecs->sensorCoords_deg, arraySpecs->Q, Y_mic); /* nSH x Q */
+    getRSH(order, (float*)sensorCoords_deg_local, arraySpecs->Q, Y_mic); /* nSH x Q */
     pinv_Y_mic = malloc1d( arraySpecs->Q * nSH *sizeof(float));
     utility_spinv(NULL, Y_mic, nSH, arraySpecs->Q, pinv_Y_mic);
     pinv_Y_mic_cmplx =  malloc1d((arraySpecs->Q) * nSH *sizeof(float_complex));
@@ -386,7 +391,8 @@ void array2sh_apply_diff_EQ(void* const hA2sh)
     double_complex* dM_diffcoh_s;
     const double_complex calpha = cmplx(1.0, 0.0); const double_complex cbeta  = cmplx(0.0, 0.0);
     double kr[HYBRID_BANDS];
-    double* dM_diffcoh; 
+    double* dM_diffcoh;
+    float sensorCoords_rad_local[MAX_NUM_SENSORS][2];
     
     if(arraySpecs->arrayType==ARRAY_CYLINDRICAL)
         return; /* unsupported */
@@ -400,6 +406,10 @@ void array2sh_apply_diff_EQ(void* const hA2sh)
     array_order = SAF_MIN((int)(ceilf(2.0f*kR_max)+0.01f), 28); /* Cap at around 28, as Bessels at 30+ can be numerically unstable */
     for(band=0; band<HYBRID_BANDS; band++)
         kr[band] = 2.0*SAF_PId*(pData->freqVector[band])*(arraySpecs->r)/pData->c;
+    for(i=0; i<arraySpecs->Q; i++){
+        sensorCoords_rad_local[i][0] = arraySpecs->sensorCoords_rad[i][0];
+        sensorCoords_rad_local[i][1] = arraySpecs->sensorCoords_rad[i][1];
+    }
     
     /* Get theoretical diffuse coherence matrix */
     switch(arraySpecs->arrayType){
@@ -409,22 +419,22 @@ void array2sh_apply_diff_EQ(void* const hA2sh)
         case ARRAY_SPHERICAL:
             switch (arraySpecs->weightType){
                 case WEIGHT_RIGID_OMNI: /* Does not handle the case where kr != kR ! */
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID, 1.0, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID, 1.0, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
                 case WEIGHT_RIGID_CARD:
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID_DIRECTIONAL, 0.5, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID_DIRECTIONAL, 0.5, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
                 case WEIGHT_RIGID_DIPOLE:
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID_DIRECTIONAL, 0.0, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID_DIRECTIONAL, 0.0, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
                 case WEIGHT_OPEN_OMNI:
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN, 1.0, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN, 1.0, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
                 case WEIGHT_OPEN_CARD:
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.5, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.5, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
                 case WEIGHT_OPEN_DIPOLE:
-                    sphDiffCohMtxTheory(array_order, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.0, kr, HYBRID_BANDS, dM_diffcoh);
+                    sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.0, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
             }
             break;
@@ -622,7 +632,7 @@ void array2sh_initArray
 (
     void* const hPars,
     ARRAY2SH_MICROPHONE_ARRAY_PRESETS preset,
-    int* arrayOrder,
+    _Atomic_INT32* arrayOrder,
     int firstInitFlag
 )
 {

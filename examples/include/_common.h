@@ -30,16 +30,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if defined(_MSC_VER)
-  #if _MSC_VER >= 1936 && defined(__STDC_VERSION__) && __STDC_VERSION__ < 201112L
-    #pragma message("WARNING: The MSVC C compiler only has \"experimental\" Atomic support") /* although, seems to be fine... */
-    #define STD_ATOMICS_SUPPORTED ( 1 )
-  #else
-    #pragma message("WARNING: Atomics require C11 and are not supported by the MSVC C compiler pre _MSC_VER=1936")
-    #define STD_ATOMICS_SUPPORTED ( 0 )
-  #endif
-#else
-  #define STD_ATOMICS_SUPPORTED ( 1 )
+#ifndef __STDC_NO_ATOMICS__
   #include <stdatomic.h>
 #endif
 
@@ -251,22 +242,30 @@ typedef enum {
 /** Maximum number of spherical harmonic components/signals supported */
 #define MAX_NUM_SH_SIGNALS ( MAX_NUM_CHANNELS )
 
-#if STD_ATOMICS_SUPPORTED
-  typedef _Atomic(float) _Atomic_FLOAT32;
-  typedef _Atomic(int)   _Atomic_INT32;
-
-  typedef _Atomic(CH_ORDER) _Atomic_CH_ORDER;
-  typedef _Atomic(NORM_TYPES) _Atomic_NORM_TYPES;
-  typedef _Atomic(CODEC_STATUS) _Atomic_CODEC_STATUS;
-  typedef _Atomic(PROC_STATUS) _Atomic_PROC_STATUS;
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(CH_ORDER)                  _Atomic_CH_ORDER;
+  typedef _Atomic(NORM_TYPES)                _Atomic_NORM_TYPES;
+  typedef _Atomic(SH_ORDERS)                 _Atomic_SH_ORDERS;
+  typedef _Atomic(MIC_PRESETS)               _Atomic_MIC_PRESETS;
+  typedef _Atomic(LOUDSPEAKER_ARRAY_PRESETS) _Atomic_LOUDSPEAKER_ARRAY_PRESETS;
+  typedef _Atomic(SOURCE_CONFIG_PRESETS)     _Atomic_SOURCE_CONFIG_PRESETS;
+  typedef _Atomic(STATIC_BEAM_TYPES)         _Atomic_STATIC_BEAM_TYPES;
+  typedef _Atomic(HFOV_OPTIONS)              _Atomic_HFOV_OPTIONS;
+  typedef _Atomic(ASPECT_RATIO_OPTIONS)      _Atomic_ASPECT_RATIO_OPTIONS;
+  typedef _Atomic(CODEC_STATUS)              _Atomic_CODEC_STATUS;
+  typedef _Atomic(PROC_STATUS)               _Atomic_PROC_STATUS;
 #else
-  typedef float _Atomic_FLOAT32;
-  typedef int   _Atomic_INT32;
-
-  typedef CH_ORDER _Atomic_CH_ORDER;
-  typedef NORM_TYPES _Atomic_NORM_TYPES;
-  typedef CODEC_STATUS _Atomic_CODEC_STATUS;
-  typedef PROC_STATUS _Atomic_PROC_STATUS;
+  typedef CH_ORDER                  _Atomic_CH_ORDER;
+  typedef NORM_TYPES                _Atomic_NORM_TYPES;
+  typedef SH_ORDERS                 _Atomic_SH_ORDERS;
+  typedef MIC_PRESETS               _Atomic_MIC_PRESETS;
+  typedef LOUDSPEAKER_ARRAY_PRESETS _Atomic_LOUDSPEAKER_ARRAY_PRESETS;
+  typedef SOURCE_CONFIG_PRESETS     _Atomic_SOURCE_CONFIG_PRESETS;
+  typedef STATIC_BEAM_TYPES         _Atomic_STATIC_BEAM_TYPES;
+  typedef HFOV_OPTIONS              _Atomic_HFOV_OPTIONS;
+  typedef ASPECT_RATIO_OPTIONS      _Atomic_ASPECT_RATIO_OPTIONS;
+  typedef CODEC_STATUS              _Atomic_CODEC_STATUS;
+  typedef PROC_STATUS               _Atomic_PROC_STATUS;
 #endif
 
 

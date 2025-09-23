@@ -86,31 +86,31 @@ typedef struct _ambi_drc
     float freqVector[HYBRID_BANDS];  /**< Frequency vector */
 
     /* internal */
-    int nSH;                         /**< Current number of SH signals */
-    int new_nSH;                     /**< New number of SH signals (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 nSH;               /**< Current number of SH signals */
+    _Atomic_INT32 new_nSH;           /**< New number of SH signals (current value will be replaced by this after next re-init) */
     float fs;                        /**< Host sampling rate, in Hz */
     float yL_z1[HYBRID_BANDS];       /**< Delay elements */
-    int reInitTFT;                   /**< 0: no init required, 1: init required, 2: init in progress */
+    _Atomic_INT32 reInitTFT;         /**< 0: no init required, 1: init required, 2: init in progress */
 
 #ifdef ENABLE_TF_DISPLAY
-    int wIdx;                        /**< Display slot write index */
-    int rIdx;                        /**< Display slot read index */
-    int storeIdx;                    /**< Display slot storage index */
+    _Atomic_INT32 wIdx;              /**< Display slot write index */
+    _Atomic_INT32 rIdx;              /**< Display slot read index */
+    _Atomic_INT32 storeIdx;          /**< Display slot storage index */
     float** gainsTF_bank0;           /**< Display slot "0" DRC gains */
     float** gainsTF_bank1;           /**< Display slot "1" DRC gains */
 #endif
 
     /* user parameters */
-    float theshold;                  /**< Threshold parameter, in dB */
-    float ratio;                     /**< Compression ratio */
-    float knee;                      /**< Knee width, in dB */
-    float inGain;                    /**< Pre-gain, in dB */
-    float outGain;                   /**< Post-gain, in dB*/
-    float attack_ms;                 /**< Attack time, in ms */
-    float release_ms;                /**< Release time, in ms */
-    CH_ORDER chOrdering;             /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                 /**< Ambisonic normalisation convention (see #NORM_TYPES) */
-    SH_ORDERS currentOrder;          /**< Current input SH order */
+    _Atomic_FLOAT32 theshold;        /**< Threshold parameter, in dB */
+    _Atomic_FLOAT32 ratio;           /**< Compression ratio */
+    _Atomic_FLOAT32 knee;            /**< Knee width, in dB */
+    _Atomic_FLOAT32 inGain;          /**< Pre-gain, in dB */
+    _Atomic_FLOAT32 outGain;         /**< Post-gain, in dB*/
+    _Atomic_FLOAT32 attack_ms;       /**< Attack time, in ms */
+    _Atomic_FLOAT32 release_ms;      /**< Release time, in ms */
+    _Atomic_CH_ORDER chOrdering;     /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;         /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_SH_ORDERS currentOrder;  /**< Current input SH order */
     
 } ambi_drc_data;
      
@@ -129,7 +129,7 @@ float ambi_drc_smoothPeakDetector(float xL, float yL_z1, float alpha_a, float al
 void ambi_drc_initTFT(void* const hAmbi);
 
 /** Sets the internal input order */
-void ambi_drc_setInputOrder(SH_ORDERS inOrder, int* nSH);
+void ambi_drc_setInputOrder(SH_ORDERS inOrder, _Atomic_INT32* nSH);
 
     
 #ifdef __cplusplus

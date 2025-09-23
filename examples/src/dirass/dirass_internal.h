@@ -61,6 +61,16 @@ extern "C" {
 #define MAX_NUM_DISPLAY_SH_SIGNALS ( (MAX_DISPLAY_SH_ORDER+1)*(MAX_DISPLAY_SH_ORDER+1) )  /**< Maximum number of SH signals for the display/upscaling SH output */
 #define NUM_DISP_SLOTS ( 2 )                 /**< Number of display slots */
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(DIRASS_UPSCALE_ORDERS)  _Atomic_DIRASS_UPSCALE_ORDERS;
+  typedef _Atomic(DIRASS_GRID_OPTIONS)    _Atomic_DIRASS_GRID_OPTIONS;
+  typedef _Atomic(DIRASS_REASS_MODES)     _Atomic_DIRASS_REASS_MODES;
+#else
+  typedef DIRASS_UPSCALE_ORDERS           _Atomic_DIRASS_UPSCALE_ORDERS;
+  typedef DIRASS_GRID_OPTIONS             _Atomic_DIRASS_GRID_OPTIONS;
+  typedef DIRASS_REASS_MODES              _Atomic_DIRASS_REASS_MODES;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -112,41 +122,41 @@ typedef struct _dirass
     float fs;                               /**< host sampling rate */
     
     /* internal */ 
-    int dispWidth;                          /**< number of interpolation points on the horizontal */
-    float Wz12_hpf[MAX_NUM_INPUT_SH_SIGNALS][2]; /**< delayed elements used in the HPF */
-    float Wz12_lpf[MAX_NUM_INPUT_SH_SIGNALS][2]; /**< delayed elements used in the LPF */
-    int new_inputOrder;                     /**< New input/analysis order */
-    int new_upscaleOrder;                   /**< New target upscale order */
+    _Atomic_INT32 dispWidth;                          /**< number of interpolation points on the horizontal */
+    float Wz12_hpf[MAX_NUM_INPUT_SH_SIGNALS][2];      /**< delayed elements used in the HPF */
+    float Wz12_lpf[MAX_NUM_INPUT_SH_SIGNALS][2];      /**< delayed elements used in the LPF */
+    _Atomic_INT32 new_inputOrder;                     /**< New input/analysis order */
+    _Atomic_INT32 new_upscaleOrder;                   /**< New target upscale order */
     
     /* ana configuration */
-    CODEC_STATUS codecStatus;               /**< see #CODEC_STATUS */
-    PROC_STATUS procStatus;                 /**< see #PROC_STATUS */
-    float progressBar0_1;                   /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
+    _Atomic_PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;         /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;                  /**< Current (re)initialisation step, string */
     dirass_codecPars* pars;                 /**< codec parameters */
     
     /* display */
     float* pmap;                            /**< grid_nDirs x 1 */
     float* pmap_grid[NUM_DISP_SLOTS];       /**< dirass interpolated to grid; interp_nDirs x 1 */
-    int dispSlotIdx;                        /**< current display slot index */
+    _Atomic_INT32 dispSlotIdx;              /**< current display slot index */
     float pmap_grid_minVal;                 /**< minimum value in pmap */
     float pmap_grid_maxVal;                 /**< maximum value in pmap */
-    int recalcPmap;                         /**< set this to 1 to generate a new image */
-    int pmapReady;                          /**< 0: image generation not started yet, 1: image is ready for plotting*/
+    _Atomic_INT32 recalcPmap;               /**< set this to 1 to generate a new image */
+    _Atomic_INT32 pmapReady;                /**< 0: image generation not started yet, 1: image is ready for plotting*/
     
     /* User parameters */
-    int inputOrder;                         /**< Current input/analysis order */
-    STATIC_BEAM_TYPES beamType;             /**< beamformer type mode */
-    DIRASS_REASS_MODES DirAssMode;          /**< see #DIRASS_REASS_MODES enum */
-    int upscaleOrder;                       /**< Current target upscale order */
-    DIRASS_GRID_OPTIONS gridOption;         /**< grid option */
-    float pmapAvgCoeff;                     /**< averaging coefficient for the intensity vector per grid direction */
-    float minFreq_hz;                       /**< minimum frequency to include in pmap generation, Hz */
-    float maxFreq_hz;                       /**< maximum frequency to include in pmap generation, Hz */
-    CH_ORDER chOrdering;                    /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                        /**< Ambisonic normalisation convention (see #NORM_TYPES) */
-    HFOV_OPTIONS HFOVoption;                /**< horizontal field-of-view option */
-    ASPECT_RATIO_OPTIONS aspectRatioOption; /**< aspect ratio option */
+    _Atomic_INT32 inputOrder;                       /**< Current input/analysis order */
+    _Atomic_STATIC_BEAM_TYPES beamType;             /**< beamformer type mode */
+    _Atomic_DIRASS_REASS_MODES DirAssMode;          /**< see #DIRASS_REASS_MODES enum */
+    _Atomic_INT32 upscaleOrder;                     /**< Current target upscale order */
+    _Atomic_DIRASS_GRID_OPTIONS gridOption;         /**< grid option */
+    _Atomic_FLOAT32 pmapAvgCoeff;                   /**< averaging coefficient for the intensity vector per grid direction */
+    _Atomic_FLOAT32 minFreq_hz;                     /**< minimum frequency to include in pmap generation, Hz */
+    _Atomic_FLOAT32 maxFreq_hz;                     /**< maximum frequency to include in pmap generation, Hz */
+    _Atomic_CH_ORDER chOrdering;                    /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                        /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_HFOV_OPTIONS HFOVoption;                /**< horizontal field-of-view option */
+    _Atomic_ASPECT_RATIO_OPTIONS aspectRatioOption; /**< aspect ratio option */
     
 } dirass_data;
 

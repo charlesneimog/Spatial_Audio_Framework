@@ -541,7 +541,7 @@ void ims_shoebox_applyEchogramTD
 void ims_shoebox_setRoomDimensions
 (
     void* hIms,
-    float new_roomDimensions[3]
+    _Atomic_FLOAT32 new_roomDimensions[3]
 )
 {
     ims_scene_data *sc = (ims_scene_data*)(hIms);
@@ -567,7 +567,7 @@ void ims_shoebox_setRoomDimensions
 void ims_shoebox_setWallAbsCoeffs
 (
     void* hIms,
-    float* abs_wall
+    _Atomic_FLOAT32* abs_wall
 )
 {
     ims_scene_data *sc = (ims_scene_data*)(hIms);
@@ -705,7 +705,7 @@ void ims_shoebox_updateSource
 (
     void* hIms,
     int sourceID,
-    float new_position_xyz[3]
+    _Atomic_FLOAT32 new_position_xyz[3]
 )
 {
     ims_scene_data *sc = (ims_scene_data*)(hIms);
@@ -749,7 +749,7 @@ void ims_shoebox_updateReceiver
 (
     void* hIms,
     int receiverID,
-    float new_position_xyz[3]
+    _Atomic_FLOAT32 new_position_xyz[3]
 )
 {
     ims_scene_data *sc = (ims_scene_data*)(hIms);

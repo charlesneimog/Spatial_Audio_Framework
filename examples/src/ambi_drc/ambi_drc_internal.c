@@ -101,7 +101,7 @@ void ambi_drc_initTFT
     pData->nSH = pData->new_nSH; 
 }
 
-void ambi_drc_setInputOrder(SH_ORDERS inOrder, int* nSH)
+void ambi_drc_setInputOrder(SH_ORDERS inOrder, _Atomic_INT32* nSH)
 {
     switch(inOrder){ 
         case SH_ORDER_FIRST:

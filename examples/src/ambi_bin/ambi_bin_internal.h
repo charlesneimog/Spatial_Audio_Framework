@@ -77,10 +77,12 @@ extern "C" {
 # error "AMBI_BIN_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#if STD_ATOMICS_SUPPORTED
+#ifndef __STDC_NO_ATOMICS__
   typedef _Atomic(AMBI_BIN_PREPROC) _Atomic_AMBI_BIN_PREPROC;
+  typedef _Atomic(AMBI_BIN_DECODING_METHODS) _Atomic_AMBI_BIN_DECODING_METHODS;
 #else
   typedef AMBI_BIN_PREPROC _Atomic_AMBI_BIN_PREPROC;
+  typedef AMBI_BIN_DECODING_METHODS _Atomic_AMBI_BIN_DECODING_METHODS;
 #endif
 
     
@@ -149,7 +151,7 @@ typedef struct _ambi_bin
     _Atomic_INT32 enableMaxRE;      /**< 0: disabled, 1: enabled */
     _Atomic_INT32 enableDiffuseMatching; /**< 0: disabled, 1: enabled */
     _Atomic_INT32 enableTruncationEQ;    /**< 0: disabled, 1: enabled */
-    AMBI_BIN_DECODING_METHODS method;  /**< current decoding method (see #AMBI_BIN_DECODING_METHODS) */
+    _Atomic_AMBI_BIN_DECODING_METHODS method;  /**< current decoding method (see #AMBI_BIN_DECODING_METHODS) */
     _Atomic_INT32 useDefaultHRIRsFLAG; /**< 1: use default HRIRs in database, 0: use those from SOFA file */
     _Atomic_AMBI_BIN_PREPROC preProc; /**< HRIR pre-processing strategy */
     _Atomic_CH_ORDER chOrdering;    /**< Ambisonic channel order convention (see #CH_ORDER) */

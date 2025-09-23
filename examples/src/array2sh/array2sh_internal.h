@@ -81,20 +81,34 @@ extern "C" {
 # error "ARRAY2SH_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(ARRAY2SH_MICROPHONE_ARRAY_PRESETS)  _Atomic_ARRAY2SH_MICROPHONE_ARRAY_PRESETS;
+  typedef _Atomic(ARRAY2SH_FILTER_TYPES) _Atomic_ARRAY2SH_FILTER_TYPES;
+  typedef _Atomic(ARRAY2SH_ARRAY_TYPES)  _Atomic_ARRAY2SH_ARRAY_TYPES;
+  typedef _Atomic(ARRAY2SH_WEIGHT_TYPES) _Atomic_ARRAY2SH_WEIGHT_TYPES;
+  typedef _Atomic(ARRAY2SH_EVAL_STATUS)  _Atomic_ARRAY2SH_EVAL_STATUS;
+#else
+  typedef ARRAY2SH_MICROPHONE_ARRAY_PRESETS  _Atomic_ARRAY2SH_MICROPHONE_ARRAY_PRESETS;
+  typedef ARRAY2SH_FILTER_TYPES _Atomic_ARRAY2SH_FILTER_TYPES;
+  typedef ARRAY2SH_ARRAY_TYPES  _Atomic_ARRAY2SH_ARRAY_TYPES;
+  typedef ARRAY2SH_WEIGHT_TYPES _Atomic_ARRAY2SH_WEIGHT_TYPES;
+  typedef ARRAY2SH_EVAL_STATUS  _Atomic_ARRAY2SH_EVAL_STATUS;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
 
 /** Contains variables for describing the microphone/hydrophone array */
 typedef struct _array2sh_arrayPars {
-    int Q;                                      /**< Current number of sensors */
-    int newQ;                                   /**< New number of sensors (current value replaced by this after next re-init) */
-    float r;                                    /**< radius of sensors */
-    float R;                                    /**< radius of scatterer (only for rigid arrays) */
-    ARRAY2SH_ARRAY_TYPES arrayType;             /**< see #ARRAY2SH_ARRAY_TYPES */
-    ARRAY2SH_WEIGHT_TYPES weightType;           /**< see #ARRAY2SH_WEIGHT_TYPES */
-    float sensorCoords_rad[MAX_NUM_SENSORS][2]; /**< Sensor directions in radians */
-    float sensorCoords_deg[MAX_NUM_SENSORS][2]; /**< Sensor directions in degrees */
+    _Atomic_INT32 Q;                                      /**< Current number of sensors */
+    _Atomic_INT32 newQ;                                   /**< New number of sensors (current value replaced by this after next re-init) */
+    _Atomic_FLOAT32 r;                                    /**< radius of sensors */
+    _Atomic_FLOAT32 R;                                    /**< radius of scatterer (only for rigid arrays) */
+    _Atomic_ARRAY2SH_ARRAY_TYPES arrayType;               /**< see #ARRAY2SH_ARRAY_TYPES */
+    _Atomic_ARRAY2SH_WEIGHT_TYPES weightType;             /**< see #ARRAY2SH_WEIGHT_TYPES */
+    _Atomic_FLOAT32 sensorCoords_rad[MAX_NUM_SENSORS][2]; /**< Sensor directions in radians */
+    _Atomic_FLOAT32 sensorCoords_deg[MAX_NUM_SENSORS][2]; /**< Sensor directions in degrees */
         
 }array2sh_arrayPars;
 
@@ -130,11 +144,11 @@ typedef struct _array2sh
     void* arraySpecs;               /**< array configuration */
     
     /* internal parameters */
-    ARRAY2SH_EVAL_STATUS evalStatus; /**< see #ARRAY2SH_EVAL_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
-    char* progressBarText;          /**< Current (re)initialisation step, string */ 
-    int fs;                         /**< sampling rate, hz */
-    int new_order;                  /**< new encoding order (current value will be replaced by this after next re-init) */
+    _Atomic_ARRAY2SH_EVAL_STATUS evalStatus; /**< see #ARRAY2SH_EVAL_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;  /**< Current (re)initialisation progress, between [0..1] */
+    char* progressBarText;           /**< Current (re)initialisation step, string */
+    int fs;                          /**< sampling rate, hz */
+    _Atomic_INT32 new_order;         /**< new encoding order (current value will be replaced by this after next re-init) */
 
     /* For diffuse-field equalisation */
     double_complex* L_diff_fal;
@@ -144,20 +158,20 @@ typedef struct _array2sh
     double_complex* W_tmp;
 
     /* flags */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
-    int reinitSHTmatrixFLAG;        /**< 0: do not reinit; 1: reinit; */
-    int evalRequestedFLAG;          /**< 0: do not reinit; 1: reinit; */
+    _Atomic_PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_INT32 reinitSHTmatrixFLAG;        /**< 0: do not reinit; 1: reinit; */
+    _Atomic_INT32 evalRequestedFLAG;          /**< 0: do not reinit; 1: reinit; */
     
     /* additional user parameters that are not included in the array presets */
-    int order;                      /**< current encoding order */
-    ARRAY2SH_MICROPHONE_ARRAY_PRESETS preset; /**< currently selected MIC preset */
-    ARRAY2SH_FILTER_TYPES filterType;  /**< encoding filter approach */
-    float regPar;                   /**< regularisation upper gain limit, dB; */
-    CH_ORDER chOrdering;            /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                /**< Ambisonic normalisation convention (see #NORM_TYPES) */
-    float c;                        /**< speed of sound, m/s */
-    float gain_dB;                  /**< post gain, dB */
-    int enableDiffEQpastAliasing;   /**< 0: disabled, 1: enabled */
+    _Atomic_INT32 order;                      /**< current encoding order */
+    _Atomic_ARRAY2SH_MICROPHONE_ARRAY_PRESETS preset; /**< currently selected MIC preset */
+    _Atomic_ARRAY2SH_FILTER_TYPES filterType; /**< encoding filter approach */
+    _Atomic_FLOAT32 regPar;                   /**< regularisation upper gain limit, dB; */
+    _Atomic_CH_ORDER chOrdering;              /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                  /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_FLOAT32 c;                        /**< speed of sound, m/s */
+    _Atomic_FLOAT32 gain_dB;                  /**< post gain, dB */
+    _Atomic_INT32 enableDiffEQpastAliasing;   /**< 0: disabled, 1: enabled */
     
 } array2sh_data;
 
@@ -229,7 +243,7 @@ void array2sh_destroyArray(void ** const hPars);
  */
 void array2sh_initArray(void * const hPars,
                         ARRAY2SH_MICROPHONE_ARRAY_PRESETS preset,
-                        int* arrayOrder,
+                        _Atomic_INT32* arrayOrder,
                         int firstInitFLAG);
 
 

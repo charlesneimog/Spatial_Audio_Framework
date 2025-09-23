@@ -72,6 +72,9 @@ void panner_initGainTables(void* const hPan)
         pData->output_nDims = 3;
 #endif
     
+    strcpy(pData->progressBarText,"Generating VBAP Gain Table");
+    pData->progressBar0_1 = 0.7f;
+    
     /* generate VBAP gain table */
     free(pData->vbap_gtable);
     pData->vbapTableRes[0] = 1;
@@ -116,8 +119,8 @@ void panner_initTFT
 void panner_loadSourcePreset
 (
     SOURCE_CONFIG_PRESETS preset,
-    float dirs_deg[MAX_NUM_INPUTS][2],
-    int* newNCH,
+    _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+    _Atomic_INT32* newNCH,
     int* nDims
 )
 {
@@ -316,7 +319,7 @@ void panner_loadSourcePreset
        However, in these cases, triangulation should fail and revert to 2D anyway) */
     sum_elev = 0.0f;
     for(i=0; i<nCH; i++)
-        sum_elev += fabsf(dirs_deg[i][1]);
+        sum_elev += fabsf((float)dirs_deg[i][1]);
     if(sum_elev < 0.01f)
         (*nDims) = 2;
     else
@@ -326,8 +329,8 @@ void panner_loadSourcePreset
 void panner_loadLoudspeakerPreset
 (
     LOUDSPEAKER_ARRAY_PRESETS preset,
-    float dirs_deg[MAX_NUM_INPUTS][2],
-    int* newNCH,
+    _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+    _Atomic_INT32* newNCH,
     int* nDims
 )
 {
@@ -515,7 +518,7 @@ void panner_loadLoudspeakerPreset
        However, in these cases, triangulation should fail and revert to 2D anyway) */
     sum_elev = 0.0f;
     for(i=0; i<nCH; i++)
-        sum_elev += fabsf(dirs_deg[i][1]);
+        sum_elev += fabsf((float)dirs_deg[i][1]);
     if(sum_elev < 0.01f)
         (*nDims) = 2;
     else

@@ -177,7 +177,8 @@ void ambi_dec_init
 
     /* define frequency vector */
     pData->fs = sampleRate;
-    afSTFT_getCentreFreqs(pData->hSTFT, (float)sampleRate, HYBRID_BANDS, pData->freqVector);
+    if (pData->codecStatus == CODEC_STATUS_INITIALISED)
+        afSTFT_getCentreFreqs(pData->hSTFT, (float)pData->fs, HYBRID_BANDS, pData->freqVector);
 }
 
 void ambi_dec_initCodec
@@ -190,6 +191,7 @@ void ambi_dec_initCodec
     int i, ch, d, j, n, ng, nGrid_dirs, masterOrder, nSH_order, max_nSH, nLoudspeakers;
     float* grid_dirs_deg, *Y, *M_dec_tmp, *g, *a, *e, *a_n, *hrtf_vbap_gtable;;
     float a_avg[MAX_SH_ORDER], e_avg[MAX_SH_ORDER], azi_incl[2], sum_elev;
+    float loudpkrs_dirs_deg_local[MAX_NUM_LOUDSPEAKERS][2];
 #ifdef SAF_ENABLE_SOFA_READER_MODULE
     SAF_SOFA_ERROR_CODES error;
     saf_sofa_container sofa;
@@ -226,15 +228,22 @@ void ambi_dec_initCodec
             afSTFT_channelChange(pData->hSTFT, max_nSH, nLoudspeakers);
         afSTFT_clearBuffers(pData->hSTFT);
     }
+    afSTFT_getCentreFreqs(pData->hSTFT, (float)pData->fs, HYBRID_BANDS, pData->freqVector); 
     pData->binauraliseLS = pData->new_binauraliseLS;
     pData->nLoudpkrs = nLoudspeakers;
+    
+    /* Grab local copy */
+    for(ch=0; ch < nLoudspeakers; ch++){
+        loudpkrs_dirs_deg_local[ch][0] = pData->loudpkrs_dirs_deg[ch][0];
+        loudpkrs_dirs_deg_local[ch][1] = pData->loudpkrs_dirs_deg[ch][1];
+    }
     
     /* Quick and dirty check to find loudspeaker dimensionality */
     strcpy(pData->progressBarText,"Computing decoder");
     pData->progressBar0_1 = 0.2f;
     sum_elev = 0.0f;
     for(ch=0; ch < nLoudspeakers; ch++)
-        sum_elev += fabsf(pData->loudpkrs_dirs_deg[ch][1]);
+        sum_elev += fabsf(loudpkrs_dirs_deg_local[ch][1]);
     if( (((sum_elev < 5.0f) && (sum_elev > -5.0f))) || (nLoudspeakers < 4) )
         pData->loudpkrs_nDims = 2;
     else
@@ -243,10 +252,10 @@ void ambi_dec_initCodec
     /* add virtual loudspeakers for 2D case if using AllRAD, so that the triangulation cannot fail. */
     if (pData->loudpkrs_nDims == 2 && (pData->dec_method[0]==DECODING_METHOD_ALLRAD || pData->dec_method[1]==DECODING_METHOD_ALLRAD)){
         assert(nLoudspeakers<=MAX_NUM_LOUDSPEAKERS-2);
-        pData->loudpkrs_dirs_deg[nLoudspeakers][0] = 0.0f;
-        pData->loudpkrs_dirs_deg[nLoudspeakers][1] = -90.0f;
-        pData->loudpkrs_dirs_deg[nLoudspeakers+1][0] = 0.0f;
-        pData->loudpkrs_dirs_deg[nLoudspeakers+1][1] = 90.0f;
+        loudpkrs_dirs_deg_local[nLoudspeakers][0] = 0.0f;
+        loudpkrs_dirs_deg_local[nLoudspeakers][1] = -90.0f;
+        loudpkrs_dirs_deg_local[nLoudspeakers+1][0] = 0.0f;
+        loudpkrs_dirs_deg_local[nLoudspeakers+1][1] = 90.0f;
         nLoudspeakers += 2;
     }
     
@@ -261,16 +270,16 @@ void ambi_dec_initCodec
         M_dec_tmp = malloc1d(nLoudspeakers * max_nSH * sizeof(float));
         switch(pData->dec_method[d]){
             case DECODING_METHOD_SAD:
-                getLoudspeakerDecoderMtx((float*)pData->loudpkrs_dirs_deg, nLoudspeakers, LOUDSPEAKER_DECODER_SAD, masterOrder, 0, M_dec_tmp);
+                getLoudspeakerDecoderMtx((float*)loudpkrs_dirs_deg_local, nLoudspeakers, LOUDSPEAKER_DECODER_SAD, masterOrder, 0, M_dec_tmp);
                 break;
             case DECODING_METHOD_MMD:
-                getLoudspeakerDecoderMtx((float*)pData->loudpkrs_dirs_deg, nLoudspeakers, LOUDSPEAKER_DECODER_MMD, masterOrder, 0, M_dec_tmp);
+                getLoudspeakerDecoderMtx((float*)loudpkrs_dirs_deg_local, nLoudspeakers, LOUDSPEAKER_DECODER_MMD, masterOrder, 0, M_dec_tmp);
                 break;
             case DECODING_METHOD_EPAD:
-                getLoudspeakerDecoderMtx((float*)pData->loudpkrs_dirs_deg, nLoudspeakers, LOUDSPEAKER_DECODER_EPAD, masterOrder, 0, M_dec_tmp);
+                getLoudspeakerDecoderMtx((float*)loudpkrs_dirs_deg_local, nLoudspeakers, LOUDSPEAKER_DECODER_EPAD, masterOrder, 0, M_dec_tmp);
                 break;
             case DECODING_METHOD_ALLRAD:
-                getLoudspeakerDecoderMtx((float*)pData->loudpkrs_dirs_deg, nLoudspeakers, LOUDSPEAKER_DECODER_ALLRAD, masterOrder, 0, M_dec_tmp);
+                getLoudspeakerDecoderMtx((float*)loudpkrs_dirs_deg_local, nLoudspeakers, LOUDSPEAKER_DECODER_ALLRAD, masterOrder, 0, M_dec_tmp);
                 break;
         }
         
@@ -880,7 +889,7 @@ void ambi_dec_getDecOrderHandle
 {
     ambi_dec_data *pData = (ambi_dec_data*)(hAmbi);
     (*pX_vector) = &pData->freqVector[0];
-    (*pY_values) = &pData->orderPerBand[0];
+    (*pY_values) = (int*)&pData->orderPerBand[0];
     (*pNpoints) = HYBRID_BANDS;
 }
 

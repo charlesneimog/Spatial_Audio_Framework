@@ -61,6 +61,12 @@ extern "C" {
 # error "BINAURALISER_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(INTERP_MODES) _Atomic_INTERP_MODES;
+#else
+  typedef INTERP_MODES _Atomic_INTERP_MODES;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -77,7 +83,7 @@ typedef struct _binauraliser
     float** outframeTD;              /**< time-domain output frame; #NUM_EARS x #BINAURALISER_FRAME_SIZE */
     float_complex*** inputframeTF;   /**< time-frequency domain input frame; #HYBRID_BANDS x #MAX_NUM_INPUTS x #TIME_SLOTS */
     float_complex*** outputframeTF;  /**< time-frequency domain input frame; #HYBRID_BANDS x #NUM_EARS x #TIME_SLOTS */
-    int fs;                          /**< Host sampling rate, in Hz */
+    _Atomic_FLOAT32 fs;              /**< Host sampling rate, in Hz */
     float freqVector[HYBRID_BANDS];  /**< Frequency vector (filterbank centre frequencies) */
     void* hSTFT;                     /**< afSTFT handle */
     
@@ -85,12 +91,12 @@ typedef struct _binauraliser
     char* sofa_filepath;             /**< absolute/relevative file path for a sofa file */
     float* hrirs;                    /**< time domain HRIRs; FLAT: N_hrir_dirs x #NUM_EARS x hrir_len */
     float* hrir_dirs_deg;            /**< directions of the HRIRs in degrees [azi elev]; FLAT: N_hrir_dirs x 2 */
-    int N_hrir_dirs;                 /**< number of HRIR directions in the current sofa file */
-    int hrir_loaded_len;             /**< length of the loaded HRIRs, in samples */
-    int hrir_runtime_len;            /**< length of the HRIRs being used for processing (after any resampling), in samples */
-    int hrir_loaded_fs;              /**< sampling rate of the loaded HRIRs  */
-    int hrir_runtime_fs;             /**< sampling rate of the HRIRs being used for processing (after any resampling) */
-    float* weights;                  /**< Integration weights for the HRIR measurement grid */
+    _Atomic_INT32 N_hrir_dirs;       /**< number of HRIR directions in the current sofa file */
+    _Atomic_INT32 hrir_loaded_len;   /**< length of the loaded HRIRs, in samples */
+    _Atomic_INT32 hrir_runtime_len;  /**< length of the HRIRs being used for processing (after any resampling), in samples */
+    _Atomic_INT32 hrir_loaded_fs;    /**< sampling rate of the loaded HRIRs  */
+    _Atomic_INT32 hrir_runtime_fs;   /**< sampling rate of the HRIRs being used for processing (after any resampling) */
+    float* weights;                  /**< Integration weights for the HRIR measurement grid; N_hrir_dirs x 1 */
     
     /* vbap gain table */
     int hrtf_vbapTableRes[2];        /**< [0] azimuth, and [1] elevation grid resolution, in degrees */
@@ -105,36 +111,36 @@ typedef struct _binauraliser
     float_complex hrtf_interp[MAX_NUM_INPUTS][HYBRID_BANDS][NUM_EARS]; /**< Interpolated HRTFs */
     
     /* flags/status */
-    CODEC_STATUS codecStatus;        /**< see #CODEC_STATUS */
-    float progressBar0_1;            /**< Current (re)initialisation progress, between [0..1] */
-    char* progressBarText;           /**< Current (re)initialisation step, string */
-    PROC_STATUS procStatus;          /**< see #PROC_STATUS */
-    int recalc_hrtf_interpFLAG[MAX_NUM_INPUTS]; /**< 1: re-calculate/interpolate the HRTF, 0: do not */
-    int reInitHRTFsAndGainTables;    /**< 1: reinitialise the HRTFs and interpolation tables, 0: do not */
-    int recalc_M_rotFLAG;            /**< 1: re-calculate the rotation matrix, 0: do not */
+    _Atomic_CODEC_STATUS codecStatus;          /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;            /**< Current (re)initialisation progress, between [0..1] */
+    char* progressBarText;                     /**< Current (re)initialisation step, string */
+    _Atomic_PROC_STATUS procStatus;            /**< see #PROC_STATUS */
+    _Atomic_INT32 recalc_hrtf_interpFLAG[MAX_NUM_INPUTS]; /**< 1: re-calculate/interpolate the HRTF, 0: do not */
+    _Atomic_INT32 reInitHRTFsAndGainTables;    /**< 1: reinitialise the HRTFs and interpolation tables, 0: do not */
+    _Atomic_INT32 recalc_M_rotFLAG;            /**< 1: re-calculate the rotation matrix, 0: do not */
     
     /* misc. */
     float src_dirs_rot_deg[MAX_NUM_INPUTS][2]; /**< Intermediate rotated source directions, in degrees */
     float src_dirs_rot_xyz[MAX_NUM_INPUTS][3]; /**< Intermediate rotated source directions, as unit-length Cartesian coordinates */
     float src_dirs_xyz[MAX_NUM_INPUTS][3];     /**< Intermediate source directions, as unit-length Cartesian coordinates  */
     int nTriangles;                            /**< Number of triangles in the convex hull of the spherical arrangement of HRIR directions/points */
-    int new_nSources;                          /**< New number of input/source signals (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 new_nSources;                /**< New number of input/source signals (current value will be replaced by this after next re-init) */
 
     /* user parameters */
-    int nSources;                            /**< Current number of input/source signals */
-    float src_dirs_deg[MAX_NUM_INPUTS][2];   /**< Current source/panning directions, in degrees */
-    INTERP_MODES interpMode;                 /**< see #INTERP_MODES */
-    int useDefaultHRIRsFLAG;                 /**< 1: use default HRIRs in database, 0: use those from SOFA file */
-    int enableHRIRsDiffuseEQ;                /**< flag to diffuse-field equalisation to the currently loaded HRTFs */
-    int enableRotation;                      /**< 1: enable rotation, 0: disable */
-    float yaw;                               /**< yaw (Euler) rotation angle, in degrees */
-    float roll;                              /**< roll (Euler) rotation angle, in degrees */
-    float pitch;                             /**< pitch (Euler) rotation angle, in degrees */
-    int bFlipYaw;                            /**< flag to flip the sign of the yaw rotation angle */
-    int bFlipPitch;                          /**< flag to flip the sign of the pitch rotation angle */
-    int bFlipRoll;                           /**< flag to flip the sign of the roll rotation angle */
-    int useRollPitchYawFlag;                 /**< rotation order flag, 1: r-p-y, 0: y-p-r */
-    float src_gains[MAX_NUM_INPUTS];         /**< Gains applied per source */
+    _Atomic_INT32 nSources;                            /**< Current number of input/source signals */
+    _Atomic_FLOAT32 src_dirs_deg[MAX_NUM_INPUTS][2];   /**< Current source/panning directions, in degrees */
+    _Atomic_INTERP_MODES interpMode;                   /**< see #INTERP_MODES */
+    _Atomic_INT32 useDefaultHRIRsFLAG;                 /**< 1: use default HRIRs in database, 0: use those from SOFA file */
+    _Atomic_INT32 enableHRIRsDiffuseEQ;                /**< flag to diffuse-field equalisation to the currently loaded HRTFs */
+    _Atomic_INT32 enableRotation;                      /**< 1: enable rotation, 0: disable */
+    _Atomic_FLOAT32 yaw;                               /**< yaw (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 roll;                              /**< roll (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 pitch;                             /**< pitch (Euler) rotation angle, in degrees */
+    _Atomic_INT32 bFlipYaw;                            /**< flag to flip the sign of the yaw rotation angle */
+    _Atomic_INT32 bFlipPitch;                          /**< flag to flip the sign of the pitch rotation angle */
+    _Atomic_INT32 bFlipRoll;                           /**< flag to flip the sign of the roll rotation angle */
+    _Atomic_INT32 useRollPitchYawFlag;                 /**< rotation order flag, 1: r-p-y, 0: y-p-r */
+    _Atomic_FLOAT32 src_gains[MAX_NUM_INPUTS];         /**< Gains applied per source */
 
 } binauraliser_data;
 
@@ -196,8 +202,8 @@ void binauraliser_initTFT(void* const hBin);
  * @param[out] nDims    (&) estimate of the number of dimensions (2 or 3)
  */
 void binauraliser_loadPreset(SOURCE_CONFIG_PRESETS preset,
-                             float dirs_deg[MAX_NUM_INPUTS][2],
-                             int* newNCH,
+                             _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+                             _Atomic_INT32* newNCH,
                              int* nDims);
 
 

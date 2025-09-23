@@ -174,7 +174,7 @@ void matrixconv_checkReInit(void* const hMCnv)
     matrixconv_data *pData = (matrixconv_data*)(hMCnv);
     
     /* reinitialise if needed */
-    if ((pData->reInitFilters == 1) && (pData->filters != NULL)) {
+    if (pData->reInitFilters == 1 ) {
         pData->reInitFilters = 2;
         saf_matrixConv_destroy(&(pData->hMatrixConv));
         pData->hMatrixConv = NULL;

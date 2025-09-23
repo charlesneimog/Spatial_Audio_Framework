@@ -61,18 +61,18 @@ typedef struct _matrixconv
     void* hMatrixConv;     /**< saf_matrixConv handle */
     int hostBlockSize;     /**< current host block size */
     int hostBlockSize_clamped; /**< Clamped between #MIN_FRAME_SIZE and #MAX_FRAME_SIZE */
-    float* filters;        /**< the matrix of filters; FLAT: nOutputChannels x nInputChannels x filter_length */
-    int nfilters;          /**< the number of filters (nOutputChannels x nInputChannels) */
-    int input_wav_length;  /**< length of the wav files loaded in samples (inputs are concatenated) */
-    int filter_length;     /**< length of the filters (input_wav_length/nInputChannels) */
+    float* filters;           /**< the matrix of filters; FLAT: nOutputChannels x nInputChannels x filter_length */
+    _Atomic_INT32 nfilters;   /**< the number of filters (nOutputChannels x nInputChannels) */
+    int input_wav_length;     /**< length of the wav files loaded in samples (inputs are concatenated) */
+    _Atomic_INT32 filter_length;    /**< length of the filters (input_wav_length/nInputChannels) */
     int filter_fs;         /**< current samplerate of the filters */
     int host_fs;           /**< current samplerate of the host */
-    int reInitFilters;     /**< FLAG: 0: do not reinit, 1: reinit, 2: reinit in progress */
-    int nOutputChannels;   /**< number of output channels (same as the number of channels in the loaded wav) */
+    _Atomic_INT32 reInitFilters;    /**< FLAG: 0: do not reinit, 1: reinit, 2: reinit in progress */
+    _Atomic_INT32 nOutputChannels;  /**< number of output channels (same as the number of channels in the loaded wav) */
     
     /* user parameters */
-    int nInputChannels;        /**< number of input channels */
-    int enablePartitionedConv; /**< 0: disabled, 1: enabled */
+    _Atomic_INT32 nInputChannels;        /**< number of input channels */
+    _Atomic_INT32 enablePartitionedConv; /**< 0: disabled, 1: enabled */
     
 } matrixconv_data;
     

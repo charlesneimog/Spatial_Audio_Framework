@@ -202,7 +202,7 @@ void binauraliser_process
 {
     binauraliser_data *pData = (binauraliser_data*)(hBin);
     int ch, ear, i, band, nSources;
-    float Rxyz[3][3], hypotxy;
+    float Rxyz[3][3], hypotxy, temp_gain;
     int enableRotation;
 
     /* copy user parameters to local variables */
@@ -210,7 +210,7 @@ void binauraliser_process
     enableRotation = pData->enableRotation;
     
     /* apply binaural panner */
-    if ((nSamples == BINAURALISER_FRAME_SIZE) && (pData->hrtf_fb!=NULL) && (pData->codecStatus==CODEC_STATUS_INITIALISED) ){
+    if ((nSamples == BINAURALISER_FRAME_SIZE) && (pData->codecStatus==CODEC_STATUS_INITIALISED) && (pData->hrtf_fb!=NULL) ){
         pData->procStatus = PROC_STATUS_ONGOING;
 
         /* Load time-domain data */
@@ -221,8 +221,10 @@ void binauraliser_process
 
         /* Apply source gains */
         for (ch = 0; ch < nSources; ch++) {
-            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f)
-                utility_svsmul(pData->inputFrameTD[ch], &(pData->src_gains[ch]), BINAURALISER_FRAME_SIZE, NULL);
+            if(fabsf(pData->src_gains[ch] - 1.f) > 1e-6f){
+                temp_gain = pData->src_gains[ch];
+                utility_svsmul(pData->inputFrameTD[ch], &temp_gain, BINAURALISER_FRAME_SIZE, NULL);
+            }
         }
 
         /* Apply time-frequency transform (TFT) */
@@ -543,7 +545,7 @@ int binauraliser_getNTriangles(void* const hBin)
 float binauraliser_getHRIRAzi_deg(void* const hBin, int index)
 {
     binauraliser_data *pData = (binauraliser_data*)(hBin);
-    if(pData->hrir_dirs_deg!=NULL)
+    if(!pData->reInitHRTFsAndGainTables && pData->hrir_dirs_deg!=NULL)
         return pData->hrir_dirs_deg[index*2+0];
     else
         return 0.0f;
@@ -552,7 +554,7 @@ float binauraliser_getHRIRAzi_deg(void* const hBin, int index)
 float binauraliser_getHRIRElev_deg(void* const hBin, int index)
 {
     binauraliser_data *pData = (binauraliser_data*)(hBin);
-    if(pData->hrir_dirs_deg!=NULL)
+    if(!pData->reInitHRTFsAndGainTables && pData->hrir_dirs_deg!=NULL)
         return pData->hrir_dirs_deg[index*2+1];
     else
         return 0.0f;

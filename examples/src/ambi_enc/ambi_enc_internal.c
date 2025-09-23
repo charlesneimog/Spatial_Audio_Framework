@@ -29,8 +29,8 @@
 void loadSourceConfigPreset
 (
     SOURCE_CONFIG_PRESETS preset,
-    float dirs_deg[MAX_NUM_INPUTS][2],
-    int* newNCH
+    _Atomic_FLOAT32 dirs_deg[MAX_NUM_INPUTS][2],
+    _Atomic_INT32* newNCH
 )
 { 
     int ch, i, nCH;
