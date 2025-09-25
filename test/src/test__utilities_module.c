@@ -175,10 +175,10 @@ void test__quaternion(void){
 
     for(i=0; i<1000; i++){
         /* Randomise the quaternion values */
-        rand_m1_1(Q.Q, 4);
+        rand_m1_1((float*)Q.Q, 4);
 
         /* Normalise to make it valid */
-        norm = L2_norm(Q.Q, 4);
+        norm = L2_norm((float*)Q.Q, 4);
         Q.w /= norm;
         Q.x /= norm;
         Q.y /= norm;

@@ -193,7 +193,7 @@ void test__saf_example_ambi_dec(void){
 }
 
 void test__saf_example_ambi_enc(void){
-    int nSH, i, ch, framesize, j, delay;
+    int nSH, i, ch, framesize, j;//, delay;
     void* hAmbi;
     float direction_deg[2][2];
     float** inSig, *y;
@@ -208,7 +208,7 @@ void test__saf_example_ambi_enc(void){
     direction_deg[0][1] = 0.0f;
     direction_deg[1][0] = 20.0f; /* encode to loudspeaker direction: index 8 */
     direction_deg[1][1] = -45.0f;
-    delay = ambi_enc_getProcessingDelay();
+    //delay = ambi_enc_getProcessingDelay();
 
     /* Create and initialise an instance of ambi_enc */
     ambi_enc_create(&hAmbi);

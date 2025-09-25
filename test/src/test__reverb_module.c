@@ -27,7 +27,7 @@
 void test__ims_shoebox_RIR(void){
     void* hIms;
     float maxTime_s;
-    float mov_src_pos[3], mov_rec_pos[3];
+    _Atomic_FLOAT32 mov_src_pos[3], mov_rec_pos[3];
     int sourceID_1, sourceID_3, sourceID_4, receiverID;
     int i;
 
@@ -98,7 +98,7 @@ void test__ims_shoebox_RIR(void){
 void test__ims_shoebox_TD(void){
     void* hIms;
     float maxTime_s;
-    float mov_src_pos[3], mov_rec_pos[3];
+    _Atomic_FLOAT32 mov_src_pos[3], mov_rec_pos[3];
     float** src_sigs, ***rec_sh_outsigs;
     int sourceIDs[4], receiverIDs[1];
     int i;
