@@ -243,17 +243,17 @@ typedef enum {
 #define MAX_NUM_SH_SIGNALS ( MAX_NUM_CHANNELS )
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(CH_ORDER)                  _Atomic_CH_ORDER;
-  typedef _Atomic(NORM_TYPES)                _Atomic_NORM_TYPES;
-  typedef _Atomic(SH_ORDERS)                 _Atomic_SH_ORDERS;
-  typedef _Atomic(MIC_PRESETS)               _Atomic_MIC_PRESETS;
-  typedef _Atomic(LOUDSPEAKER_ARRAY_PRESETS) _Atomic_LOUDSPEAKER_ARRAY_PRESETS;
-  typedef _Atomic(SOURCE_CONFIG_PRESETS)     _Atomic_SOURCE_CONFIG_PRESETS;
-  typedef _Atomic(STATIC_BEAM_TYPES)         _Atomic_STATIC_BEAM_TYPES;
-  typedef _Atomic(HFOV_OPTIONS)              _Atomic_HFOV_OPTIONS;
-  typedef _Atomic(ASPECT_RATIO_OPTIONS)      _Atomic_ASPECT_RATIO_OPTIONS;
-  typedef _Atomic(CODEC_STATUS)              _Atomic_CODEC_STATUS;
-  typedef _Atomic(PROC_STATUS)               _Atomic_PROC_STATUS;
+  typedef _Atomic CH_ORDER                  _Atomic_CH_ORDER;
+  typedef _Atomic NORM_TYPES                _Atomic_NORM_TYPES;
+  typedef _Atomic SH_ORDERS                 _Atomic_SH_ORDERS;
+  typedef _Atomic MIC_PRESETS               _Atomic_MIC_PRESETS;
+  typedef _Atomic LOUDSPEAKER_ARRAY_PRESETS _Atomic_LOUDSPEAKER_ARRAY_PRESETS;
+  typedef _Atomic SOURCE_CONFIG_PRESETS     _Atomic_SOURCE_CONFIG_PRESETS;
+  typedef _Atomic STATIC_BEAM_TYPES         _Atomic_STATIC_BEAM_TYPES;
+  typedef _Atomic HFOV_OPTIONS              _Atomic_HFOV_OPTIONS;
+  typedef _Atomic ASPECT_RATIO_OPTIONS      _Atomic_ASPECT_RATIO_OPTIONS;
+  typedef _Atomic CODEC_STATUS              _Atomic_CODEC_STATUS;
+  typedef _Atomic PROC_STATUS               _Atomic_PROC_STATUS;
 #else
   typedef CH_ORDER                  _Atomic_CH_ORDER;
   typedef NORM_TYPES                _Atomic_NORM_TYPES;

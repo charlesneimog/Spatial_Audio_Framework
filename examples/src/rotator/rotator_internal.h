@@ -66,7 +66,7 @@ typedef enum {
 } M_ROT_STATUS;
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(M_ROT_STATUS) _Atomic_M_ROT_STATUS;
+  typedef _Atomic M_ROT_STATUS _Atomic_M_ROT_STATUS;
 #else
   typedef M_ROT_STATUS _Atomic_M_ROT_STATUS;
 #endif

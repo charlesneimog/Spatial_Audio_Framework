@@ -63,7 +63,7 @@ extern "C" {
 #endif
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(POWERMAP_MODES) _Atomic_POWERMAP_MODES;
+  typedef _Atomic POWERMAP_MODES _Atomic_POWERMAP_MODES;
 #else
   typedef POWERMAP_MODES _Atomic_POWERMAP_MODES;
 #endif

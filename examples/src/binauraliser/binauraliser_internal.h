@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(INTERP_MODES) _Atomic_INTERP_MODES;
+  typedef _Atomic INTERP_MODES _Atomic_INTERP_MODES;
 #else
   typedef INTERP_MODES _Atomic_INTERP_MODES;
 #endif

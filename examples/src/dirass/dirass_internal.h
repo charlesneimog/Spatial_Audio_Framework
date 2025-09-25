@@ -62,9 +62,9 @@ extern "C" {
 #define NUM_DISP_SLOTS ( 2 )                 /**< Number of display slots */
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(DIRASS_UPSCALE_ORDERS)  _Atomic_DIRASS_UPSCALE_ORDERS;
-  typedef _Atomic(DIRASS_GRID_OPTIONS)    _Atomic_DIRASS_GRID_OPTIONS;
-  typedef _Atomic(DIRASS_REASS_MODES)     _Atomic_DIRASS_REASS_MODES;
+  typedef _Atomic DIRASS_UPSCALE_ORDERS   _Atomic_DIRASS_UPSCALE_ORDERS;
+  typedef _Atomic DIRASS_GRID_OPTIONS     _Atomic_DIRASS_GRID_OPTIONS;
+  typedef _Atomic DIRASS_REASS_MODES      _Atomic_DIRASS_REASS_MODES;
 #else
   typedef DIRASS_UPSCALE_ORDERS           _Atomic_DIRASS_UPSCALE_ORDERS;
   typedef DIRASS_GRID_OPTIONS             _Atomic_DIRASS_GRID_OPTIONS;

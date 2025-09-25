@@ -36,8 +36,8 @@ extern "C" {
 
 #ifndef __STDC_NO_ATOMICS__
   #include <stdatomic.h>
-  typedef _Atomic(int)   _Atomic_INT32;
-  typedef _Atomic(float) _Atomic_FLOAT32;
+  typedef _Atomic int   _Atomic_INT32;
+  typedef _Atomic float _Atomic_FLOAT32;
 #else
   typedef int   _Atomic_INT32;
   typedef float _Atomic_FLOAT32;

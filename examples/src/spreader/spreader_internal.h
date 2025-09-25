@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 #ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(SPREADER_PROC_MODES) _Atomic_SPREADER_PROC_MODES;
+  typedef _Atomic SPREADER_PROC_MODES _Atomic_SPREADER_PROC_MODES;
 #else
   typedef SPREADER_PROC_MODES _Atomic_SPREADER_PROC_MODES;
 #endif
