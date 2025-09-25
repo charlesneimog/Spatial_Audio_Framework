@@ -46,7 +46,7 @@ extern "C" {
 # endif
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic PITCH_SHIFTER_FFTSIZE_OPTIONS _Atomic_PITCH_SHIFTER_FFTSIZE_OPTIONS;
   typedef _Atomic PITCH_SHIFTER_OSAMP_OPTIONS _Atomic_PITCH_SHIFTER_OSAMP_OPTIONS;
 #else

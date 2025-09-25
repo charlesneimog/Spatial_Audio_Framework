@@ -30,7 +30,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   #include <stdatomic.h>
 #endif
 
@@ -242,7 +242,7 @@ typedef enum {
 /** Maximum number of spherical harmonic components/signals supported */
 #define MAX_NUM_SH_SIGNALS ( MAX_NUM_CHANNELS )
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic CH_ORDER                  _Atomic_CH_ORDER;
   typedef _Atomic NORM_TYPES                _Atomic_NORM_TYPES;
   typedef _Atomic SH_ORDERS                 _Atomic_SH_ORDERS;

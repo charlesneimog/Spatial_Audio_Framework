@@ -61,7 +61,7 @@ extern "C" {
 # error "SPREADER_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic SPREADER_PROC_MODES _Atomic_SPREADER_PROC_MODES;
 #else
   typedef SPREADER_PROC_MODES _Atomic_SPREADER_PROC_MODES;

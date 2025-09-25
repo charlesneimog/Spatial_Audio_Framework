@@ -34,7 +34,7 @@ extern "C" {
 
 #include "saf_utility_complex.h"
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   #include <stdatomic.h>
   typedef _Atomic int   _Atomic_INT32;
   typedef _Atomic float _Atomic_FLOAT32;

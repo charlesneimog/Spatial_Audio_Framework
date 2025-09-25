@@ -81,7 +81,7 @@ extern "C" {
 # error "ARRAY2SH_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic ARRAY2SH_MICROPHONE_ARRAY_PRESETS  _Atomic_ARRAY2SH_MICROPHONE_ARRAY_PRESETS;
   typedef _Atomic ARRAY2SH_FILTER_TYPES _Atomic_ARRAY2SH_FILTER_TYPES;
   typedef _Atomic ARRAY2SH_ARRAY_TYPES  _Atomic_ARRAY2SH_ARRAY_TYPES;

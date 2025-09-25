@@ -62,7 +62,7 @@ extern "C" {
 # error "POWERMAP_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic POWERMAP_MODES _Atomic_POWERMAP_MODES;
 #else
   typedef POWERMAP_MODES _Atomic_POWERMAP_MODES;

@@ -61,7 +61,7 @@ extern "C" {
 # error "BINAURALISER_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic INTERP_MODES _Atomic_INTERP_MODES;
 #else
   typedef INTERP_MODES _Atomic_INTERP_MODES;

@@ -77,7 +77,7 @@ extern "C" {
 # error "AMBI_DEC_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic AMBI_DEC_DECODING_METHODS _Atomic_AMBI_DEC_DECODING_METHODS;
   typedef _Atomic AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH _Atomic_AMBI_DEC_DIFFUSE_FIELD_EQ_APPROACH;
 #else

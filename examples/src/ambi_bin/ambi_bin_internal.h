@@ -77,7 +77,7 @@ extern "C" {
 # error "AMBI_BIN_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic AMBI_BIN_PREPROC _Atomic_AMBI_BIN_PREPROC;
   typedef _Atomic AMBI_BIN_DECODING_METHODS _Atomic_AMBI_BIN_DECODING_METHODS;
 #else

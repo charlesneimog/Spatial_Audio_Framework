@@ -61,7 +61,7 @@ extern "C" {
 #define MAX_NUM_DISPLAY_SH_SIGNALS ( (MAX_DISPLAY_SH_ORDER+1)*(MAX_DISPLAY_SH_ORDER+1) )  /**< Maximum number of SH signals for the display/upscaling SH output */
 #define NUM_DISP_SLOTS ( 2 )                 /**< Number of display slots */
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic DIRASS_UPSCALE_ORDERS   _Atomic_DIRASS_UPSCALE_ORDERS;
   typedef _Atomic DIRASS_GRID_OPTIONS     _Atomic_DIRASS_GRID_OPTIONS;
   typedef _Atomic DIRASS_REASS_MODES      _Atomic_DIRASS_REASS_MODES;

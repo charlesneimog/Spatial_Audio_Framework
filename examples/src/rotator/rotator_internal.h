@@ -65,7 +65,7 @@ typedef enum {
     M_ROT_RECOMPUTE_QUATERNION /**< Use Quaternions to recompute M_rot */
 } M_ROT_STATUS;
 
-#ifndef __STDC_NO_ATOMICS__
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) && !defined(__STDC_NO_ATOMICS__)
   typedef _Atomic M_ROT_STATUS _Atomic_M_ROT_STATUS;
 #else
   typedef M_ROT_STATUS _Atomic_M_ROT_STATUS;
