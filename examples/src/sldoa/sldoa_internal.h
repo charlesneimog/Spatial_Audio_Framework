@@ -96,9 +96,9 @@ typedef struct _sldoa
     float fs;                       /**< Host sampling rate, in Hz */
       
     /* ana configuration */
-    CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
+    _Atomic_PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;         /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;          /**< Current (re)initialisation step, string */
     
     /* internal */
@@ -110,23 +110,23 @@ typedef struct _sldoa
     float doa_rad[HYBRID_BANDS][MAX_NUM_SECTORS][2]; /**< Current DoA estimates per band and sector, in radians */
     float energy [HYBRID_BANDS][MAX_NUM_SECTORS];    /**< Current Sector energies */
     int nSectorsPerBand[HYBRID_BANDS];               /**< Number of sectors per band */
-    int new_masterOrder;                             /**< New master/maximum analysis order (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 new_masterOrder;                   /**< New master/maximum analysis order (current value will be replaced by this after next re-init) */
     
     /* display */
     float* azi_deg[NUM_DISP_SLOTS];      /**< DoA azimuths, in degrees */
     float* elev_deg[NUM_DISP_SLOTS];     /**< DoA elevations, in degrees */
     float* colourScale[NUM_DISP_SLOTS];  /**< Values dictating each DoA marker colour */
     float* alphaScale[NUM_DISP_SLOTS];   /**< Values dictating each DoA marker transparency */
-    int current_disp_idx;                /**< Current display slot */
+    _Atomic_INT32 current_disp_idx;      /**< Current display slot */
     
     /* User parameters */
-    int masterOrder;                     /**< Current master/maximum analysis order */
-    int analysisOrderPerBand[HYBRID_BANDS]; /**< Analysis order MIN(anaPerBand, masterOrder) for each frequency band */
-    float maxFreq;                       /**< Maximum display frequency, in Hz */
-    float minFreq;                       /**< Minimum display frequency, in Hz */
-    float avg_ms;                        /**< Temporal averaging, in ms */
-    CH_ORDER chOrdering;                 /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                     /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_INT32 masterOrder;                     /**< Current master/maximum analysis order */
+    int analysisOrderPerBand[HYBRID_BANDS];        /**< Analysis order MIN(anaPerBand, masterOrder) for each frequency band */
+    _Atomic_FLOAT32 maxFreq;                       /**< Maximum display frequency, in Hz */
+    _Atomic_FLOAT32 minFreq;                       /**< Minimum display frequency, in Hz */
+    _Atomic_FLOAT32 avg_ms;                        /**< Temporal averaging, in ms */
+    _Atomic_CH_ORDER chOrdering;                   /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                       /**< Ambisonic normalisation convention (see #NORM_TYPES) */
 
 } sldoa_data;
      

@@ -34,6 +34,15 @@ extern "C" {
 
 #include "saf_utility_complex.h"
 
+#ifndef __STDC_NO_ATOMICS__
+  #include <stdatomic.h>
+  typedef _Atomic(int)   _Atomic_INT32;
+  typedef _Atomic(float) _Atomic_FLOAT32;
+#else
+  typedef int   _Atomic_INT32;
+  typedef float _Atomic_FLOAT32;
+#endif
+
 /* Cross-platform sleep macro (slightly modified), originally taken from:
  * https://cboard.cprogramming.com/c-programming/170381-cross-platform-wait-sleep.html */
 #ifdef _WIN32

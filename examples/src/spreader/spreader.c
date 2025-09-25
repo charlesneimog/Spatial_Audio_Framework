@@ -383,8 +383,11 @@ void spreader_process
     procMode = pData->procMode;
     nSources = pData->nSources;
     Q = pData->Q;
-    memcpy((float*)src_dirs_deg, pData->src_dirs_deg, nSources*2*sizeof(float));
-    memcpy((float*)src_spread, pData->src_spread, nSources*sizeof(float));
+    for(i=0; i<nSources; i++){
+        src_dirs_deg[i][0] = pData->src_dirs_deg[i][0];
+        src_dirs_deg[i][1] = pData->src_dirs_deg[i][1];
+        src_spread[i] = pData->src_spread[i];
+    }
 
     /* apply binaural panner */
     if ((nSamples == SPREADER_FRAME_SIZE) && (pData->codecStatus==CODEC_STATUS_INITIALISED) ){
@@ -856,7 +859,7 @@ int spreader_getNDirs(void* const hSpr)
 float spreader_getIRAzi_deg(void* const hSpr, int index)
 {
     spreader_data *pData = (spreader_data*)(hSpr);
-    if(pData->grid_dirs_deg!=NULL)
+    if(pData->codecStatus == CODEC_STATUS_INITIALISED && pData->grid_dirs_deg!=NULL)
         return pData->grid_dirs_deg[index*2+0];
     else
         return 0.0f;
@@ -865,7 +868,7 @@ float spreader_getIRAzi_deg(void* const hSpr, int index)
 float spreader_getIRElev_deg(void* const hSpr, int index)
 {
     spreader_data *pData = (spreader_data*)(hSpr);
-    if(pData->grid_dirs_deg!=NULL)
+    if(pData->codecStatus == CODEC_STATUS_INITIALISED && pData->grid_dirs_deg!=NULL)
         return pData->grid_dirs_deg[index*2+1];
     else
         return 0.0f;

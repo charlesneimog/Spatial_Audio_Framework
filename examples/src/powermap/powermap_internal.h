@@ -61,7 +61,13 @@ extern "C" {
 #if (POWERMAP_FRAME_SIZE % HOP_SIZE != 0)
 # error "POWERMAP_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
-    
+
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(POWERMAP_MODES) _Atomic_POWERMAP_MODES;
+#else
+  typedef POWERMAP_MODES _Atomic_POWERMAP_MODES;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -100,38 +106,38 @@ typedef struct _powermap
     /* internal */
     int isFirstInit;            /**< Flag */
     float_complex Cx[HYBRID_BANDS][MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS];     /**< covariance matrices per band */
-    int new_masterOrder;            /**< New maximum/master SH analysis order (current value will be replaced by this after next re-init) */
-    int dispWidth;                  /**< Number of pixels on the horizontal in the 2D interpolated powermap image */
+    _Atomic_INT32 new_masterOrder;    /**< New maximum/master SH analysis order (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 dispWidth;          /**< Number of pixels on the horizontal in the 2D interpolated powermap image */
     
     /* ana configuration */
-    CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
-    char* progressBarText;          /**< Current (re)initialisation step, string */
-    powermap_codecPars* pars;       /**< codec parameters */
+    _Atomic_CODEC_STATUS codecStatus; /**< see #CODEC_STATUS */
+    _Atomic_PROC_STATUS procStatus;   /**< see #PROC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;   /**< Current (re)initialisation progress, between [0..1] */
+    char* progressBarText;            /**< Current (re)initialisation step, string */
+    powermap_codecPars* pars;         /**< codec parameters */
     
     /* display */
     float* pmap;                    /**< grid_nDirs x 1 */
     float* prev_pmap;               /**< grid_nDirs x 1 */
     float* pmap_grid[NUM_DISP_SLOTS]; /**< powermap interpolated to grid; interp_nDirs x 1 */
-    int dispSlotIdx;                /**< Current display slot */
+    _Atomic_INT32 dispSlotIdx;      /**< Current display slot */
     float pmap_grid_minVal;         /**< Current minimum value in pmap (used to normalise [0..1]) */
     float pmap_grid_maxVal;         /**< Current maximum value in pmap (used to normalise [0..1]) */
-    int recalcPmap;                 /**< set this to 1 to generate a new powermap */
-    int pmapReady;                  /**< 0: powermap not started yet, 1: powermap is ready for plotting*/
+    _Atomic_INT32 recalcPmap;       /**< set this to 1 to generate a new powermap */
+    _Atomic_INT32 pmapReady;        /**< 0: powermap not started yet, 1: powermap is ready for plotting*/
     
     /* User parameters */
-    int masterOrder;                /**< Current maximum/master SH analysis order */
-    int analysisOrderPerBand[HYBRID_BANDS]; /**< SH analysis order per frequency band */
-    float pmapEQ[HYBRID_BANDS];     /**< Equalisation/weights per band */
-    HFOV_OPTIONS HFOVoption;        /**< see #HFOV_OPTIONS */
-    ASPECT_RATIO_OPTIONS aspectRatioOption; /**< see #ASPECT_RATIO_OPTIONS */
-    float covAvgCoeff;              /**< Covariance matrix averaging coefficient, [0..1] */
-    float pmapAvgCoeff;             /**< Powermap averaging coefficient, [0..1] */
-    int nSources;                   /**< Current number of sources (used for MUSIC) */
-    POWERMAP_MODES pmap_mode;       /**< see #POWERMAP_MODES*/
-    CH_ORDER chOrdering;            /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_INT32 masterOrder;              /**< Current maximum/master SH analysis order */
+    _Atomic_INT32 analysisOrderPerBand[HYBRID_BANDS]; /**< SH analysis order per frequency band */
+    _Atomic_FLOAT32 pmapEQ[HYBRID_BANDS];   /**< Equalisation/weights per band */
+    _Atomic_HFOV_OPTIONS HFOVoption;        /**< see #HFOV_OPTIONS */
+    _Atomic_ASPECT_RATIO_OPTIONS aspectRatioOption; /**< see #ASPECT_RATIO_OPTIONS */
+    _Atomic_FLOAT32 covAvgCoeff;            /**< Covariance matrix averaging coefficient, [0..1] */
+    _Atomic_FLOAT32 pmapAvgCoeff;           /**< Powermap averaging coefficient, [0..1] */
+    _Atomic_INT32 nSources;                 /**< Current number of sources (used for MUSIC) */
+    _Atomic_POWERMAP_MODES pmap_mode;       /**< see #POWERMAP_MODES*/
+    _Atomic_CH_ORDER chOrdering;            /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                /**< Ambisonic normalisation convention (see #NORM_TYPES) */
     
 } powermap_data;
 

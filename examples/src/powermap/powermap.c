@@ -642,7 +642,7 @@ void powermap_getPowermapEQHandle
 {
     powermap_data *pData = (powermap_data*)(hPm);
     (*pX_vector) = &(pData->freqVector[0]);
-    (*pY_values) = &(pData->pmapEQ[0]);
+    (*pY_values) = (float*)&(pData->pmapEQ[0]);
     (*pNpoints) = HYBRID_BANDS;
 }
 
@@ -668,7 +668,7 @@ void powermap_getAnaOrderHandle
 {
     powermap_data *pData = (powermap_data*)(hPm);
     (*pX_vector) = &(pData->freqVector[0]);
-    (*pY_values) = &(pData->analysisOrderPerBand[0]);
+    (*pY_values) = (int*)&(pData->analysisOrderPerBand[0]);
     (*pNpoints) = HYBRID_BANDS;
 }
 

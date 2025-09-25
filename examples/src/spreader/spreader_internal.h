@@ -61,6 +61,12 @@ extern "C" {
 # error "SPREADER_FRAME_SIZE must be an integer multiple of HOP_SIZE"
 #endif
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(SPREADER_PROC_MODES) _Atomic_SPREADER_PROC_MODES;
+#else
+  typedef SPREADER_PROC_MODES _Atomic_SPREADER_PROC_MODES;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -84,10 +90,10 @@ typedef struct _spreader
     void* hSTFT;                       /**< afSTFT handle */
 
     /* Internal */
-    int Q;                             /**< Number of channels in the target playback setup; for example: 2 for binaural */
-    int nGrid;                         /**< Number of directions/measurements/HRTFs etc. */
-    int h_len;                         /**< Length of time-domain filters, in samples */
-    float h_fs;                        /**< Sample rate used to measure the filters */
+    _Atomic_INT32 Q;                   /**< Number of channels in the target playback setup; for example: 2 for binaural */
+    _Atomic_INT32 nGrid;               /**< Number of directions/measurements/HRTFs etc. */
+    _Atomic_INT32 h_len;               /**< Length of time-domain filters, in samples */
+    _Atomic_FLOAT32 h_fs;              /**< Sample rate used to measure the filters */
     float* h_grid;                     /**< FLAT: nGrid x Q x h_len */
     float_complex* H_grid;             /**< FLAT: HYBRID_BANDS x Q x nGrid */
     float_complex** HHH[HYBRID_BANDS]; /**< Pre-computed array outer-products; HYBRID_BANDS x nGrid x FLAT: (Q x Q) */
@@ -125,21 +131,21 @@ typedef struct _spreader
     float_complex* _Cproto;
  
     /* flags/status */
-    CODEC_STATUS codecStatus;          /**< see #CODEC_STATUS */
-    float progressBar0_1;              /**< Current (re)initialisation progress, between [0..1] */
-    char* progressBarText;             /**< Current (re)initialisation step, string */
-    PROC_STATUS procStatus;            /**< see #PROC_STATUS */
-    int new_nSources;                  /**< New number of input signals (current value will be replaced by this after next re-init) */
-    SPREADER_PROC_MODES new_procMode;  /**< See #SPREADER_PROC_MODES (current value will be replaced by this after next re-init) */
+    _Atomic_CODEC_STATUS codecStatus;            /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1;              /**< Current (re)initialisation progress, between [0..1] */
+    char* progressBarText;                       /**< Current (re)initialisation step, string */
+    _Atomic_PROC_STATUS procStatus;              /**< see #PROC_STATUS */
+    _Atomic_INT32 new_nSources;                  /**< New number of input signals (current value will be replaced by this after next re-init) */
+    _Atomic_SPREADER_PROC_MODES new_procMode;    /**< See #SPREADER_PROC_MODES (current value will be replaced by this after next re-init) */
 
     /* user parameters */
-    SPREADER_PROC_MODES procMode;      /**< See #SPREADER_PROC_MODES */
-    char* sofa_filepath;               /**< SOFA file path */
-    int nSources;                      /**< Current number of input signals */
-    float src_spread[SPREADER_MAX_NUM_SOURCES];      /**< Source spreading, in degrees */
-    float src_dirs_deg[SPREADER_MAX_NUM_SOURCES][2]; /**< Source directions, in degrees */
-    int useDefaultHRIRsFLAG;           /**< 1: use default HRIRs in database, 0: use the measurements from SOFA file (can be anything, not just HRTFs) */
-    float covAvgCoeff;                 /**< Covariance matrix averaging coefficient, [0..1] */
+    _Atomic_SPREADER_PROC_MODES procMode;        /**< See #SPREADER_PROC_MODES */
+    char* sofa_filepath;                         /**< SOFA file path */
+    _Atomic_INT32 nSources;                      /**< Current number of input signals */
+    _Atomic_FLOAT32 src_spread[SPREADER_MAX_NUM_SOURCES];      /**< Source spreading, in degrees */
+    _Atomic_FLOAT32 src_dirs_deg[SPREADER_MAX_NUM_SOURCES][2]; /**< Source directions, in degrees */
+    _Atomic_INT32 useDefaultHRIRsFLAG;           /**< 1: use default HRIRs in database, 0: use the measurements from SOFA file (can be anything, not just HRTFs) */
+    _Atomic_FLOAT32 covAvgCoeff;                 /**< Covariance matrix averaging coefficient, [0..1] */
 
 } spreader_data;
 

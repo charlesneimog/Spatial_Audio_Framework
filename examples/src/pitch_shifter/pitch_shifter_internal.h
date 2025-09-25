@@ -46,6 +46,14 @@ extern "C" {
 # endif
 #endif
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(PITCH_SHIFTER_FFTSIZE_OPTIONS) _Atomic_PITCH_SHIFTER_FFTSIZE_OPTIONS;
+  typedef _Atomic(PITCH_SHIFTER_OSAMP_OPTIONS) _Atomic_PITCH_SHIFTER_OSAMP_OPTIONS;
+#else
+  typedef PITCH_SHIFTER_FFTSIZE_OPTIONS _Atomic_PITCH_SHIFTER_FFTSIZE_OPTIONS;
+  typedef PITCH_SHIFTER_OSAMP_OPTIONS _Atomic_PITCH_SHIFTER_OSAMP_OPTIONS;
+#endif
+
 /* ========================================================================== */
 /*                                 Structures                                 */
 /* ========================================================================== */
@@ -60,22 +68,22 @@ typedef struct _pitch_shifter
 
     /* internal */
     void* hSmb;                     /**< pitch-shifter handle */
-    CODEC_STATUS codecStatus;       /**< see #CODEC_STATUS */
-    float progressBar0_1;           /**< Current (re)initialisation progress, between [0..1] */
+    _Atomic_CODEC_STATUS codecStatus;  /**< see #CODEC_STATUS */
+    _Atomic_FLOAT32 progressBar0_1; /**< Current (re)initialisation progress, between [0..1] */
     char* progressBarText;          /**< Current (re)initialisation step, string */
-    PROC_STATUS procStatus;         /**< see #PROC_STATUS */
+    _Atomic_PROC_STATUS procStatus; /**< see #PROC_STATUS */
     float sampleRate;               /**< Host sampling rate, in Hz */
     float inputFrame[MAX_NUM_CHANNELS][PITCH_SHIFTER_FRAME_SIZE];  /**< Current input frame */
     float outputFrame[MAX_NUM_CHANNELS][PITCH_SHIFTER_FRAME_SIZE]; /**< Current output frame */
-    int new_nChannels;              /**< (current value will be replaced by this after next re-init) */
+    _Atomic_INT32 new_nChannels;    /**< (current value will be replaced by this after next re-init) */
     int fftFrameSize;               /**< FFT size */
     int stepsize;                   /**< Hop size in samples*/
 
     /* user parameters */
-    int nChannels;                  /**< Current number of input/output channels */
-    float pitchShift_factor;        /**< 1: no shift, 0.5: down one octave, 2: up one octave */
-    PITCH_SHIFTER_FFTSIZE_OPTIONS fftsize_option; /**< see #PITCH_SHIFTER_FFTSIZE_OPTIONS */
-    PITCH_SHIFTER_OSAMP_OPTIONS osamp_option;     /**< see #PITCH_SHIFTER_OSAMP_OPTIONS */
+    _Atomic_INT32 nChannels;        /**< Current number of input/output channels */
+    _Atomic_FLOAT32 pitchShift_factor;  /**< 1: no shift, 0.5: down one octave, 2: up one octave */
+    _Atomic_PITCH_SHIFTER_FFTSIZE_OPTIONS fftsize_option; /**< see #PITCH_SHIFTER_FFTSIZE_OPTIONS */
+    _Atomic_PITCH_SHIFTER_OSAMP_OPTIONS osamp_option;     /**< see #PITCH_SHIFTER_OSAMP_OPTIONS */
     
 } pitch_shifter_data;
 

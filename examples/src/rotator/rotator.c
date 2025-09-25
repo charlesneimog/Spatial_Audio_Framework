@@ -109,7 +109,7 @@ void rotator_process
 {
     rotator_data *pData = (rotator_data*)(hRot);
     int i, j, order, nSH, mixWithPreviousFLAG;
-    float Rxyz[3][3];
+    float Rxyz[3][3], yaw_temp, pitch_temp, roll_temp;
     float M_rot_tmp[MAX_NUM_SH_SIGNALS*MAX_NUM_SH_SIGNALS];
     CH_ORDER chOrdering;
 
@@ -145,7 +145,10 @@ void rotator_process
                 else {/* M_ROT_RECOMPUTE_QUATERNION */
                     quaternion2rotationMatrix(&(pData->Q), Rxyz);
                     quaternion2euler(&(pData->Q), 0, pData->useRollPitchYawFlag ? EULER_ROTATION_ROLL_PITCH_YAW : EULER_ROTATION_YAW_PITCH_ROLL,
-                                     &(pData->yaw), &(pData->pitch), &(pData->roll));
+                                     &yaw_temp, &pitch_temp, &roll_temp);
+                    pData->yaw = yaw_temp;
+                    pData->pitch = pitch_temp;
+                    pData->roll = roll_temp;
                 }
                 getSHrotMtxReal(Rxyz, (float*)M_rot_tmp, order);
                 for(i=0; i<nSH; i++)

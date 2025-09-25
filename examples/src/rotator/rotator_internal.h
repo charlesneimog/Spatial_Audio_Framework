@@ -65,6 +65,12 @@ typedef enum {
     M_ROT_RECOMPUTE_QUATERNION /**< Use Quaternions to recompute M_rot */
 } M_ROT_STATUS;
 
+#ifndef __STDC_NO_ATOMICS__
+  typedef _Atomic(M_ROT_STATUS) _Atomic_M_ROT_STATUS;
+#else
+  typedef M_ROT_STATUS _Atomic_M_ROT_STATUS;
+#endif
+
 /** Main struct for the rotator */
 typedef struct _rotator
 {
@@ -80,22 +86,22 @@ typedef struct _rotator
     float interpolator_fadeOut[ROTATOR_FRAME_SIZE];      /**< Linear Interpolator (fade-out) */
     float M_rot[MAX_NUM_SH_SIGNALS][MAX_NUM_SH_SIGNALS];      /**< Current SH rotation matrix [1] */
     float prev_M_rot[MAX_NUM_SH_SIGNALS][MAX_NUM_SH_SIGNALS]; /**< Previous SH rotation matrix [1] */
-    M_ROT_STATUS M_rot_status;      /**< see #M_ROT_STATUS */
-    int fs;                         /**< Host sampling rate, in Hz */
+    _Atomic_M_ROT_STATUS M_rot_status;  /**< see #M_ROT_STATUS */
+    int fs;                             /**< Host sampling rate, in Hz */
 
     /* user parameters */
-    quaternion_data Q;              /**< Quaternion used for rotation */
-    int bFlipQuaternion;            /**< 1: invert quaternion, 0: no inversion */
-    float yaw;                      /**< yaw (Euler) rotation angle, in degrees */
-    float roll;                     /**< roll (Euler) rotation angle, in degrees */
-    float pitch;                    /**< pitch (Euler) rotation angle, in degrees */
-    int bFlipYaw;                   /**< flag to flip the sign of the yaw rotation angle */
-    int bFlipPitch;                 /**< flag to flip the sign of the pitch rotation angle */
-    int bFlipRoll;                  /**< flag to flip the sign of the roll rotation angle */
-    int useRollPitchYawFlag;        /**< rotation order flag, 1: r-p-y, 0: y-p-r */
-    CH_ORDER chOrdering;            /**< Ambisonic channel order convention (see #CH_ORDER) */
-    NORM_TYPES norm;                /**< Ambisonic normalisation convention (see #NORM_TYPES) */
-    SH_ORDERS inputOrder;           /**< current input/output SH order */ 
+    quaternion_data Q;                        /**< Quaternion used for rotation */
+    _Atomic_INT32 bFlipQuaternion;            /**< 1: invert quaternion, 0: no inversion */
+    _Atomic_FLOAT32 yaw;                      /**< yaw (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 roll;                     /**< roll (Euler) rotation angle, in degrees */
+    _Atomic_FLOAT32 pitch;                    /**< pitch (Euler) rotation angle, in degrees */
+    _Atomic_INT32 bFlipYaw;                   /**< flag to flip the sign of the yaw rotation angle */
+    _Atomic_INT32 bFlipPitch;                 /**< flag to flip the sign of the pitch rotation angle */
+    _Atomic_INT32 bFlipRoll;                  /**< flag to flip the sign of the roll rotation angle */
+    _Atomic_INT32 useRollPitchYawFlag;        /**< rotation order flag, 1: r-p-y, 0: y-p-r */
+    _Atomic_CH_ORDER chOrdering;              /**< Ambisonic channel order convention (see #CH_ORDER) */
+    _Atomic_NORM_TYPES norm;                  /**< Ambisonic normalisation convention (see #NORM_TYPES) */
+    _Atomic_SH_ORDERS inputOrder;             /**< current input/output SH order */
     
 } rotator_data;
     

@@ -28,6 +28,8 @@
 #ifndef SAF_GEOMETRY_H_INCLUDED
 #define SAF_GEOMETRY_H_INCLUDED
 
+#include "saf_utility_misc.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -35,12 +37,12 @@ extern "C" {
 /** Quaternion data structure */
 typedef struct _quaternion_data {
     union {
-        struct { float w; /**< W value of the quaternion [-1..1] */
-                 float x; /**< X value of the quaternion [-1..1] */
-                 float y; /**< Y value of the quaternion [-1..1] */
-                 float z; /**< Z value of the quaternion [-1..1] */
+        struct { _Atomic_FLOAT32 w; /**< W value of the quaternion [-1..1] */
+                 _Atomic_FLOAT32 x; /**< X value of the quaternion [-1..1] */
+                 _Atomic_FLOAT32 y; /**< Y value of the quaternion [-1..1] */
+                 _Atomic_FLOAT32 z; /**< Z value of the quaternion [-1..1] */
         };
-        float Q[4]; /**< WXYZ values of the quaternion [-1..1] */
+        _Atomic_FLOAT32 Q[4]; /**< WXYZ values of the quaternion [-1..1] */
     };
 } quaternion_data;
 

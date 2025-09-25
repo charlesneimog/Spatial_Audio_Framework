@@ -43,9 +43,6 @@
 #include <float.h>
 #include <assert.h>
 #include <limits.h>
-#ifndef __STDC_NO_ATOMICS__ // Optional feature of C11
-  #include <stdatomic.h>
-#endif
 
 /* ========================================================================== */
 /*                        Macros and Global Constants                         */
@@ -144,15 +141,6 @@
 # define saf_assert(x, message) assert(x)
 #endif
 
-#ifndef __STDC_NO_ATOMICS__
-  typedef _Atomic(int)   _Atomic_INT32;
-  typedef _Atomic(float) _Atomic_FLOAT32;
-#else
-  typedef int   _Atomic_INT32;
-  typedef float _Atomic_FLOAT32;
-#endif
-
-
 /* ========================================================================== */
 /*                 External Resources and SAF Utility Headers                 */
 /* ========================================================================== */
@@ -192,6 +180,9 @@
 /* For cross-platform complex number support */
 #include "saf_utility_complex.h"
 
+/* For misc. functions */
+#include "saf_utility_misc.h"
+
 /* For sorting vectors */
 #include "saf_utility_sort.h"
 
@@ -219,9 +210,6 @@
 
 /* A collection of signal decorrelators */
 #include "saf_utility_decor.h"
-
-/* For misc. functions */
-#include "saf_utility_misc.h"
 
 /* For computational geometry functions */
 #include "saf_utility_geometry.h"
