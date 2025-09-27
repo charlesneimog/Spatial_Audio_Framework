@@ -72,6 +72,11 @@ include(GNUInstallDirs)
 add_subdirectory(modules)
 add_subdirectory(resources)
 
+# Needed for C11 Atomics on GCC
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    target_link_libraries(${PROJECT_NAME} PUBLIC atomic)
+endif()
+
 
 ############################################################################
 # Performance library dependencies
