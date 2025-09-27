@@ -9,7 +9,13 @@ Major and/or breaking changes to the Spatial_Audio_Framework are listed here.
 For descriptions of minor changes and bug fixes, please refer to the git log.
 
 ====================================================================================================
-v1.3.3
+v1.3.4
+ - Added atomics support for the SAF examples (GCC and Clang) 
+ - Updated saf_sofa_reader module with latest libmysofa version
+ - Fixed memory leak in qmf and decor
+
+====================================================================================================
+v1.3.3 (13th July 2025)
  - Removed a FRAME_SIZE worth of latency from the rotator, ambi_enc and beamformer examples
  - The Xcode test project now uses Apple Accelerate as the default performance lib
 

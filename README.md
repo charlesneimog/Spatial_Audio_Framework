@@ -19,7 +19,7 @@ The framework requires the following external libraries:
 * Any library (or libraries) conforming to the [CBLAS](https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms#Implementations) and [LAPACK](https://en.wikipedia.org/wiki/LAPACK) standards
 * (**Optional**) Intel's [Integrated Performance Primitives (IPP)](https://software.intel.com/content/www/us/en/develop/tools/integrated-performance-primitives.html) for the FFT and/or resampler
 * (**Optional**) [FFTW](https://www.fftw.org/) for the FFT
-* (**Optional**) a SSE, AVX, AVX-512 supporting CPU
+* (**Optional**) [netCDF](https://www.unidata.ucar.edu/software/netcdf) for loading very large SOFA files
 
 In order to inform SAF which CBLAS/LAPACK supporting library/libraries you have linked to your project, simply add **one** of the following global pre-processor definitions:
 ```
@@ -62,6 +62,7 @@ The framework can be configured further with the following options:
 SAF_USE_INTEL_IPP # To use Intel IPP for performing the DFT/FFTs and resampling
 SAF_USE_FFTW      # To use the FFTW library for performing the DFT/FFTs 
 SAF_ENABLE_SIMD   # To enable SIMD (SSE3, AVX2 and/or AVX512) intrinsics for certain vector operations
+SAF_ENABLE_NETCDF # To enable the option to load SOFA files using netcdf (rather than libmysofa). Required for very large SOFA files.
 ```
 
 # Using the framework
@@ -91,7 +92,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE saf)
 
 The available SAF-related CMake options (and their default values) are:
 ```
--DSAF_PERFORMANCE_LIB=SAF_USE_INTEL_MKL_LP64 # performance library to employ
+-DSAF_PERFORMANCE_LIB=SAF_USE_INTEL_MKL_LP64 # performance library to employ (see above)
 -DSAF_ENABLE_SOFA_READER_MODULE=0            # enable/disable the saf_sofa_reader module 
 -DSAF_ENABLE_TRACKER_MODULE=0                # enable/disable the saf_tracker module 
 -DSAF_ENABLE_HADES_MODULE=0                  # enable/disable the saf_hades module 
