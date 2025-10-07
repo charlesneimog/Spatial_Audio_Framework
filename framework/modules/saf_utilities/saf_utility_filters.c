@@ -66,7 +66,7 @@ static void applyWindowingFunction
             
         case WINDOWING_FUNCTION_BARTLETT:
             for(i=0; i<winlength; i++)
-                x[i] *= 1.0f - 2.0f * fabsf((float)i-((float)N/2.0f))/(float)N;
+                x[i] *= 1.0f - 2.0f * (fabsf((float)i-((float)N/2.0f))/(float)N);
             break;
             
         case WINDOWING_FUNCTION_BLACKMAN:
