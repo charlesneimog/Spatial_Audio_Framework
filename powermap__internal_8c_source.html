@@ -176,11 +176,11 @@ $(function(){initNavTree('powermap__internal_8c_source.html',''); initResizable(
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordflow">if</span>(pData-&gt;<a class="code hl_variable" href="structpowermap__data.html#ac3202d8ecc87f9d96556471b9a0cb768">isFirstInit</a>){</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="comment">/* generate interpolation table for current display settings */</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordflow">switch</span>(pData-&gt;<a class="code hl_variable" href="structpowermap__data.html#a67ee77d005862d20e3e5cc50d8130a38">HFOVoption</a>){</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordflow">switch</span>((<span class="keywordtype">int</span>)atomic_load(&amp;pData-&gt;<a class="code hl_variable" href="structpowermap__data.html#a67ee77d005862d20e3e5cc50d8130a38">HFOVoption</a>)){</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">default</span>:</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="__common_8h.html#a975b8518820724af257352e501747400a4b74df39d5382bd4e776ac4e470fc9b5">HFOV_360</a>: hfov = 360.0f; <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        }</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">switch</span>(pData-&gt;<a class="code hl_variable" href="structpowermap__data.html#a3cb125aa8031fe0900dcc41216e2ef23">aspectRatioOption</a>){</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">switch</span>((<span class="keywordtype">int</span>)atomic_load(&amp;pData-&gt;<a class="code hl_variable" href="structpowermap__data.html#a3cb125aa8031fe0900dcc41216e2ef23">aspectRatioOption</a>)){</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            <span class="keywordflow">default</span>:</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="__common_8h.html#afe9cbbb0149bd11126f2ba070187e024a9e6f39db7a79ac46bf3f16f542116b3b">ASPECT_RATIO_2_1</a>: aspectRatio = 2.0f; <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        }</div>
@@ -302,7 +302,7 @@ $(function(){initNavTree('powermap__internal_8c_source.html',''); initResizable(
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d28a4824dc47e487b107a5db32ef43c4.html">examples</a></li><li class="navelem"><a class="el" href="dir_95b57effb8038f90624a8a5b60361b2e.html">src</a></li><li class="navelem"><a class="el" href="dir_a7689d48ac264591d264153e407bcb5c.html">powermap</a></li><li class="navelem"><a class="el" href="powermap__internal_8c.html">powermap_internal.c</a></li>
-    <li class="footer">Generated on Tue Dec 2 2025 13:58:33 for SAF by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Tue Dec 2 2025 14:36:46 for SAF by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 <script type="text/javascript">
