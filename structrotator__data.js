@@ -1,0 +1,26 @@
+var structrotator__data =
+[
+    [ "bFlipPitch", "structrotator__data.html#ad8aadbf7601a32ef411cb11550497e2a", null ],
+    [ "bFlipQuaternion", "structrotator__data.html#ad397ba3ec048400cf37d59a4581dd8fe", null ],
+    [ "bFlipRoll", "structrotator__data.html#aded2c15e83077bad740cbf0e1a98686a", null ],
+    [ "bFlipYaw", "structrotator__data.html#a0e3139761ff039c45e5e5013d687e74a", null ],
+    [ "chOrdering", "structrotator__data.html#a9c3da80ab040cd68664d4e19e89213ce", null ],
+    [ "fs", "structrotator__data.html#aa1876a66d6da8cd0f088b22bfd50a1c9", null ],
+    [ "inputFrameTD", "structrotator__data.html#a766247dc9329d7edc11f7d47798ec31d", null ],
+    [ "inputOrder", "structrotator__data.html#aadd127510a77971eb046b4775452a296", null ],
+    [ "interpolator_fadeIn", "structrotator__data.html#adbd0ed185be85b5b172351cc9a6a3ff7", null ],
+    [ "interpolator_fadeOut", "structrotator__data.html#a67e17e746034679d431feb9e981e8c79", null ],
+    [ "M_rot", "structrotator__data.html#a320737f2dd7670ce9fe44efff06869c0", null ],
+    [ "M_rot_status", "structrotator__data.html#ad218c43292b1ed2dba6cac7283aa0b5e", null ],
+    [ "norm", "structrotator__data.html#af7ddef3573c688825601aecc20d487e7", null ],
+    [ "outputFrameTD", "structrotator__data.html#ae22e29a9c4ed053efad0e52586e6533f", null ],
+    [ "outputFrameTD_fadeIn", "structrotator__data.html#a4ad54ec8b0f39280bf5b339ae20eb6bd", null ],
+    [ "pitch", "structrotator__data.html#aeacdbc7e96c49723dc425fa6648fa172", null ],
+    [ "prev_M_rot", "structrotator__data.html#ad7b0a3f90dfd5dd96c5acd1af59c5065", null ],
+    [ "Q", "structrotator__data.html#ab48fab07eb9f0c560e105525a793a72d", null ],
+    [ "roll", "structrotator__data.html#a5a17492d91aa7d8e10b8e1c46dd96320", null ],
+    [ "tempFrame", "structrotator__data.html#afcc92bf5115d8944d3f5f4e2ad9332bf", null ],
+    [ "tempFrame_fadeOut", "structrotator__data.html#a08298c863e47a88834431cde2ecc198f", null ],
+    [ "useRollPitchYawFlag", "structrotator__data.html#a267c067e89f9ccb5d134d5f413eb7e14", null ],
+    [ "yaw", "structrotator__data.html#a72827153de52a7be5cbaf9990cbab3a0", null ]
+];

@@ -1,0 +1,26 @@
+var structambi__roomsim__data =
+[
+    [ "abs_wall", "structambi__roomsim__data.html#a5f041e3ab05c22fadc9ecbe4ccf3a979", null ],
+    [ "chOrdering", "structambi__roomsim__data.html#a2f2865c4e6e448ea2934f97885f6abe2", null ],
+    [ "enableReflections", "structambi__roomsim__data.html#a50a387bf1b88cf3391a3525214bb59ff", null ],
+    [ "fs", "structambi__roomsim__data.html#a44671d447cc84e550e62d5c05abd367b", null ],
+    [ "hIms", "structambi__roomsim__data.html#a1bb595fce99fa041953da62edffe9db7", null ],
+    [ "inputFrameTD", "structambi__roomsim__data.html#acfde66f14f91aa1b770687f767c33829", null ],
+    [ "new_nReceivers", "structambi__roomsim__data.html#a93f483785d8b9f747aac4f016a2268b8", null ],
+    [ "new_nSources", "structambi__roomsim__data.html#a861396aa54840f8680da97c337000e8b", null ],
+    [ "new_sh_order", "structambi__roomsim__data.html#a1008cc9f3bd7dcfac975cc60955ad968", null ],
+    [ "norm", "structambi__roomsim__data.html#a1306fafd7e2f736473520b5273ea38cd", null ],
+    [ "nReceivers", "structambi__roomsim__data.html#a74633fb69be6fe3fc4dbae40312f3b0a", null ],
+    [ "nSources", "structambi__roomsim__data.html#ac3970f5099fdac643f3ff7ad34ae51cf", null ],
+    [ "outputFrameTD", "structambi__roomsim__data.html#af304584424766fe41007392401baf005", null ],
+    [ "rec_pos", "structambi__roomsim__data.html#ad9bbfcdcfeb529ee74502160b024270c", null ],
+    [ "rec_sh_outsigs", "structambi__roomsim__data.html#ac3af78ba8dd63958e3b8baa49ab35092", null ],
+    [ "receiverIDs", "structambi__roomsim__data.html#a2a1a86b1234c74c6bdb60a387f895669", null ],
+    [ "refl_order", "structambi__roomsim__data.html#ad1efcac84321bed61172ae7c1cf34c0d", null ],
+    [ "reinit_room", "structambi__roomsim__data.html#a9ca4b865d642902ef50c8958287f3075", null ],
+    [ "room_dims", "structambi__roomsim__data.html#a051eb8cc42567af6b2c4ae3c97717e6b", null ],
+    [ "sh_order", "structambi__roomsim__data.html#a9b8522c5315ae4e537f120dd28dc1830", null ],
+    [ "sourceIDs", "structambi__roomsim__data.html#a5ca6d49130755dbbf960481288b83052", null ],
+    [ "src_pos", "structambi__roomsim__data.html#af7e03c46a26c5dfd38668c7e31e85801", null ],
+    [ "src_sigs", "structambi__roomsim__data.html#ab942da24f7ba2572cd53b181c20e2a72", null ]
+];

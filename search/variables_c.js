@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['m_0',['M',['../structhades__synthesis__data.html#a1a9bce9d9fd7bc1678e18d17d7097574',1,'hades_synthesis_data::M'],['../struct_m_c_s__data.html#afe80d0d11abf07a48bd6fa59c56ba550',1,'MCS_data::M']]],
+  ['m0_1',['M0',['../structtracker3d__config.html#a0a26193f86bf7e28e2af72a3d7afde10',1,'tracker3d_config']]],
+  ['m_5fdec_2',['M_dec',['../structambi__bin__codec_pars.html#ad297c74fb027c959068a93e4f2b8ffbf',1,'ambi_bin_codecPars::M_dec'],['../structambi__dec__codec_pars.html#a3f3021281d08a469aea860191f1794e9',1,'ambi_dec_codecPars::M_dec']]],
+  ['m_5fdec_5fcmplx_3',['M_dec_cmplx',['../structambi__dec__codec_pars.html#ab3ef017e5778948dd71dec5eab10386d',1,'ambi_dec_codecPars']]],
+  ['m_5fdec_5fcmplx_5fmaxre_4',['M_dec_cmplx_maxrE',['../structambi__dec__codec_pars.html#a7217ae4501c5118bef027c8c4c52b208',1,'ambi_dec_codecPars']]],
+  ['m_5fdec_5fmaxre_5',['M_dec_maxrE',['../structambi__dec__codec_pars.html#a34628efcc11938a6fd8725f5ff92d26f',1,'ambi_dec_codecPars']]],
+  ['m_5fdec_5frot_6',['M_dec_rot',['../structambi__bin__codec_pars.html#abe5ff8473abc95c3357821532cf3a917',1,'ambi_bin_codecPars']]],
+  ['m_5fnorm_7',['M_norm',['../structambi__dec__codec_pars.html#afadc47cbbab1f9b424c035b09be3d494',1,'ambi_dec_codecPars']]],
+  ['m_5frot_8',['M_rot',['../structambi__bin__data.html#a40cd7ac92d7e58ce19b972da5d57ea0a',1,'ambi_bin_data::M_rot'],['../structrotator__data.html#a320737f2dd7670ce9fe44efff06869c0',1,'rotator_data::M_rot']]],
+  ['m_5frot_5fstatus_9',['M_rot_status',['../structrotator__data.html#ad218c43292b1ed2dba6cac7283aa0b5e',1,'rotator_data']]],
+  ['masterorder_10',['masterOrder',['../structambi__dec__data.html#a0a687f0bb9fddd33c08f3adccd40df1f',1,'ambi_dec_data::masterOrder'],['../structpowermap__data.html#a78c53c30421187fffeae2453fdbbea92',1,'powermap_data::masterOrder'],['../structsldoa__data.html#a1f76fb0c478ce6a0486be7215cadc8ce',1,'sldoa_data::masterOrder']]],
+  ['maxdimensions_11',['maxDimensions',['../structtvconv__data.html#af5dcd0ccb4e58b9cb03f805911ac01d3',1,'tvconv_data']]],
+  ['maxfreq_12',['maxFreq',['../structsldoa__data.html#af6bd5d692c3d08c060af520707c95e63',1,'sldoa_data']]],
+  ['maxfreq_5fhz_13',['maxFreq_hz',['../structdirass__data.html#a8556eefccd06e8ea23a727cbb8838f2e',1,'dirass_data']]],
+  ['maxnactivetargets_14',['maxNactiveTargets',['../structtracker3d__config.html#a866c575c878bd7fc1b00ed7d345725fa',1,'tracker3d_config']]],
+  ['maxnsamplestoexpect_15',['maxNSamplesToExpect',['../structfaf___i_i_r_f_b__data.html#a224f5ee98274c5dcaf26d5e6e505a470',1,'faf_IIRFB_data']]],
+  ['measnoisesd_16',['measNoiseSD',['../structtracker3d__config.html#a4fa2cadc0b3f12a2337f3abaec2f470a',1,'tracker3d_config']]],
+  ['message_17',['message',['../safmex_8h.html#a1e3430e018fa65c35f62f6593a4712b9',1,'safmex.h']]],
+  ['method_18',['method',['../structambi__bin__data.html#aacd1fa2f18e53e1a280547709ddb75b0',1,'ambi_bin_data']]],
+  ['mindimensions_19',['minDimensions',['../structtvconv__data.html#aaa63fbaa851c089661bf82c30ee25b00',1,'tvconv_data']]],
+  ['minfreq_20',['minFreq',['../structsldoa__data.html#aef011f4962b9edc94cb45ad8936b95de',1,'sldoa_data']]],
+  ['minfreq_5fhz_21',['minFreq_hz',['../structdirass__data.html#ad3943aba89a126b30aec42f66f75bdbf',1,'dirass_data']]]
+];

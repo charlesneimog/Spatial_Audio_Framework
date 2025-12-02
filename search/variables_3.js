@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['c_0',['c',['../structarray2sh__data.html#ac00284ce30aa65262717b340c41c324a',1,'array2sh_data']]],
+  ['c_5fms_1',['c_ms',['../structims__scene__data.html#a52674f0bdfc7c8174554ec81adcb3cbe',1,'ims_scene_data']]],
+  ['cb_5fvals_2',['cb_vals',['../structechogram__data.html#aa034509ec146241fc3ad053967f8b393',1,'echogram_data']]],
+  ['cd_3',['cd',['../structtracker3d__config.html#a204c55c44a76fb63a9e0ff246ec2e637',1,'tracker3d_config']]],
+  ['chordering_4',['chOrdering',['../structambi__bin__data.html#adc1df57e7b5a09378ca7a1d300d12331',1,'ambi_bin_data::chOrdering'],['../structambi__dec__data.html#a1ea510c676da12ba2d80063c2d994805',1,'ambi_dec_data::chOrdering'],['../structambi__drc__data.html#a0d25a80eef7e3bba52c76981d4ea3911',1,'ambi_drc_data::chOrdering'],['../structambi__enc__data.html#a865c74d86dc5b0bc79b5d7bf95c5423f',1,'ambi_enc_data::chOrdering'],['../structambi__roomsim__data.html#a2f2865c4e6e448ea2934f97885f6abe2',1,'ambi_roomsim_data::chOrdering'],['../structarray2sh__data.html#aeea9bddad2ba268b741989b9737ecdeb',1,'array2sh_data::chOrdering'],['../structbeamformer__data.html#a6e334047fe233772473e0477267bdef8',1,'beamformer_data::chOrdering'],['../structdirass__data.html#a2f71fb4c538be76c653141e8b1bf0355',1,'dirass_data::chOrdering'],['../structpowermap__data.html#a595b8395849214f409a0592c524363b2',1,'powermap_data::chOrdering'],['../structrotator__data.html#a9c3da80ab040cd68664d4e19e89213ce',1,'rotator_data::chOrdering'],['../structsldoa__data.html#a84f861ce00a3b2c303cf99c0e7c26166',1,'sldoa_data::chOrdering']]],
+  ['circ_5fbuffer_5',['circ_buffer',['../structims__scene__data.html#a3300e29abc0f0b7be696b91ace9349ae',1,'ims_scene_data']]],
+  ['codecstatus_6',['codecStatus',['../structambi__bin__data.html#a2414a81b0b7300b6ac3bb796861dabb2',1,'ambi_bin_data::codecStatus'],['../structambi__dec__data.html#ac50e4023e84e17083378a2fa79f27fb4',1,'ambi_dec_data::codecStatus'],['../structbinauraliser__data.html#aee5cb1fb91aa86cbaaf3e1e2f6009e00',1,'binauraliser_data::codecStatus'],['../structbinauraliser_n_f__data.html#adba06338c23aa157772814d2928a5fc0',1,'binauraliserNF_data::codecStatus'],['../structdecorrelator__data.html#a9c4ae9b1dd2f290bec3d15c02accb7ce',1,'decorrelator_data::codecStatus'],['../structdirass__data.html#a3cd9d80b71492dc3ceead96e1624a3bc',1,'dirass_data::codecStatus'],['../structpanner__data.html#a0968092ff3c5b2827fd6e08ef90c3307',1,'panner_data::codecStatus'],['../structpitch__shifter__data.html#a5038293cfd7f5eef4fc860cf2febc2f1',1,'pitch_shifter_data::codecStatus'],['../structpowermap__data.html#a202b09abfc756490406c941309d245f3',1,'powermap_data::codecStatus'],['../structsldoa__data.html#a3de750dc0b96b43bd0f73dd7458c970e',1,'sldoa_data::codecStatus'],['../structspreader__data.html#a1808521f54f67634b12f9612621e68bd',1,'spreader_data::codecStatus']]],
+  ['colourscale_7',['colourScale',['../structsldoa__data.html#a57a12e3b4904a665845b4755ff168ece',1,'sldoa_data']]],
+  ['comment_8',['Comment',['../structsaf__sofa__container.html#a606b78490059513e0fd8d7087cea969a',1,'saf_sofa_container']]],
+  ['compensatelevel_9',['compensateLevel',['../structdecorrelator__data.html#a374b53e1c20cb28b4336d5f7d790801d',1,'decorrelator_data']]],
+  ['contrib_10',['contrib',['../structechogram__data.html#a1c98e2e759e100d7f0bfa6469288640d',1,'echogram_data']]],
+  ['conventions_11',['Conventions',['../structsaf__sofa__container.html#a3e7f4c6180c9ed5e8cb532e2e79723e1',1,'saf_sofa_container']]],
+  ['coords_12',['coords',['../structechogram__data.html#a529cbd2460f22bce86ba055508de9b75',1,'echogram_data']]],
+  ['covavgcoeff_13',['covAvgCoeff',['../structpowermap__data.html#afdc5bd7eeb19ed09733af39ceef1730e',1,'powermap_data::covAvgCoeff'],['../structspreader__data.html#a0241c93e0d74e598a06d1d068a7c9cc7',1,'spreader_data::covAvgCoeff'],['../structhades__analysis__data.html#a082653602217f8fe0a710d749cfa7c54',1,'hades_analysis_data::covAvgCoeff']]],
+  ['cproto_14',['Cproto',['../structspreader__data.html#aab89426bfcee2305de2eda6719011809',1,'spreader_data']]],
+  ['cr_15',['Cr',['../structspreader__data.html#a96c9919217cff50c24be85a2f796d442',1,'spreader_data']]],
+  ['cr_5fcmplx_16',['Cr_cmplx',['../structspreader__data.html#aff12228b2c3e1b15d3dfdfa60685ba9d',1,'spreader_data']]],
+  ['csh_17',['cSH',['../structarray2sh__data.html#ab9659821404b5657de64592493284299',1,'array2sh_data']]],
+  ['current_5fdisp_5fidx_18',['current_disp_idx',['../structsldoa__data.html#ae3a40591345c69c79af01268fabcff72',1,'sldoa_data']]],
+  ['currentorder_19',['currentOrder',['../structambi__drc__data.html#a9e1b4e9574cc1b31a286829d7298c14d',1,'ambi_drc_data']]],
+  ['cw_20',['Cw',['../structdirass__codec_pars.html#a7b2d01da19563948706074429b815329',1,'dirass_codecPars']]],
+  ['cx_21',['Cx',['../structpowermap__data.html#ad5765171156898be3551d08bb254200f',1,'powermap_data::Cx'],['../structhades__analysis__data.html#a83215895fda23a6458b2941eb29ccae2',1,'hades_analysis_data::Cx'],['../structhades__signal__container__data.html#a44c458ac42478db531acbbd30c71e482',1,'hades_signal_container_data::Cx']]],
+  ['cxyz_22',['Cxyz',['../structdirass__codec_pars.html#a407f7abf572d43669e6600bb0f335bfa',1,'dirass_codecPars']]],
+  ['cy_23',['Cy',['../structspreader__data.html#a582c71493b6ed8f69336534a8eca5689',1,'spreader_data::Cy'],['../structhades__synthesis__data.html#a9d25c1832b120ff7f08e6085feb5637b',1,'hades_synthesis_data::Cy']]]
+];
