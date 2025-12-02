@@ -136,9 +136,9 @@ void array2sh_calculate_sht_matrix
         /* Compute modal responses */
         free(pData->bN);
         pData->bN = malloc1d((HYBRID_BANDS)*(order+1)*sizeof(double_complex));
-        switch(arraySpecs->arrayType){
+        switch(atomic_load(&arraySpecs->arrayType)){
             case ARRAY_CYLINDRICAL:
-                switch (arraySpecs->weightType){
+                switch (atomic_load(&arraySpecs->weightType)){
                     case WEIGHT_RIGID_OMNI:   cylModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_RIGID, pData->bN); break;
                     case WEIGHT_RIGID_CARD:   saf_print_error("weightType is not supported"); break;
                     case WEIGHT_RIGID_DIPOLE: saf_print_error("weightType is not supported"); break;
@@ -148,7 +148,7 @@ void array2sh_calculate_sht_matrix
                 }
                 break;
             case ARRAY_SPHERICAL:
-                switch (arraySpecs->weightType){
+                switch (atomic_load(&arraySpecs->weightType)){
                     case WEIGHT_OPEN_OMNI:   sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN, 1.0, pData->bN); break;
                     case WEIGHT_OPEN_CARD:   sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.5, pData->bN); break;
                     case WEIGHT_OPEN_DIPOLE: sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.0, pData->bN); break;
@@ -232,7 +232,7 @@ void array2sh_calculate_sht_matrix
         double_complex Hs[HYBRID_BANDS][MAX_SH_ORDER+1];
         
         /* find suitable cut-off frequencies */
-        switch (arraySpecs->weightType){
+        switch (atomic_load(&arraySpecs->weightType)){
             case WEIGHT_OPEN_OMNI:   sphArrayNoiseThreshold(order, arraySpecs->Q, arraySpecs->r, pData->c, ARRAY_CONSTRUCTION_OPEN, 1.0, pData->regPar, f_lim); break;
             case WEIGHT_OPEN_CARD:   sphArrayNoiseThreshold(order, arraySpecs->Q, arraySpecs->r, pData->c, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.5, pData->regPar, f_lim); break;
             case WEIGHT_OPEN_DIPOLE: sphArrayNoiseThreshold(order, arraySpecs->Q, arraySpecs->r, pData->c, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.0, pData->regPar, f_lim); break;
@@ -266,9 +266,9 @@ void array2sh_calculate_sht_matrix
         /* compute inverse radial response */ 
         free(pData->bN);
         pData->bN = malloc1d((HYBRID_BANDS)*(order+1)*sizeof(double_complex));
-        switch(arraySpecs->arrayType){
+        switch(atomic_load(&arraySpecs->arrayType)){
             case ARRAY_CYLINDRICAL:
-                switch (arraySpecs->weightType){
+                switch (atomic_load(&arraySpecs->weightType)){
                     case WEIGHT_RIGID_OMNI:   cylModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_RIGID, pData->bN); break;
                     case WEIGHT_RIGID_CARD:   /* not supported */ break;
                     case WEIGHT_RIGID_DIPOLE: /* not supported */ break;
@@ -278,7 +278,7 @@ void array2sh_calculate_sht_matrix
                 }
                 break;
             case ARRAY_SPHERICAL:
-                switch (arraySpecs->weightType){
+                switch (atomic_load(&arraySpecs->weightType)){
                     case WEIGHT_OPEN_OMNI:   sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN, 1.0, pData->bN); break;
                     case WEIGHT_OPEN_CARD:   sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.5, pData->bN); break;
                     case WEIGHT_OPEN_DIPOLE: sphModalCoeffs(order, kr, HYBRID_BANDS, ARRAY_CONSTRUCTION_OPEN_DIRECTIONAL, 0.0, pData->bN); break;
@@ -412,12 +412,12 @@ void array2sh_apply_diff_EQ(void* const hA2sh)
     }
     
     /* Get theoretical diffuse coherence matrix */
-    switch(arraySpecs->arrayType){
+    switch(atomic_load(&arraySpecs->arrayType)){
         case ARRAY_CYLINDRICAL:
             return; /* Unsupported */
             break;
         case ARRAY_SPHERICAL:
-            switch (arraySpecs->weightType){
+            switch (atomic_load(&arraySpecs->weightType)){
                 case WEIGHT_RIGID_OMNI: /* Does not handle the case where kr != kR ! */
                     sphDiffCohMtxTheory(array_order, (float*)sensorCoords_rad_local, arraySpecs->Q, ARRAY_CONSTRUCTION_RIGID, 1.0, kr, HYBRID_BANDS, dM_diffcoh);
                     break;
@@ -539,9 +539,9 @@ void array2sh_evaluateSHTfilters(void* hA2sh)
         kR[band] = 2.0*SAF_PId*(pData->freqVector[band])*(arraySpecs->R)/pData->c;
     }
     H_array = malloc1d((HYBRID_BANDS) * (arraySpecs->Q) * 812*sizeof(float_complex));
-    switch(arraySpecs->arrayType){
+    switch(atomic_load(&arraySpecs->arrayType)){
         case ARRAY_SPHERICAL:
-            switch(arraySpecs->weightType){
+            switch(atomic_load(&arraySpecs->weightType)){
                 default:
                 case WEIGHT_RIGID_OMNI:
                     simulateSphArray(simOrder, kr, kR, HYBRID_BANDS, (float*)arraySpecs->sensorCoords_rad, arraySpecs->Q,
@@ -571,7 +571,7 @@ void array2sh_evaluateSHTfilters(void* hA2sh)
             break;
             
         case ARRAY_CYLINDRICAL:
-            switch(arraySpecs->weightType){
+            switch(atomic_load(&arraySpecs->weightType)){
                 default:
                 case WEIGHT_RIGID_OMNI:
                 case WEIGHT_RIGID_CARD:

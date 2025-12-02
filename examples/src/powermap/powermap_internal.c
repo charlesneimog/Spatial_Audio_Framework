@@ -75,11 +75,11 @@ void powermap_initAna(void* const hPm)
 
     if(pData->isFirstInit){
         /* generate interpolation table for current display settings */
-        switch(pData->HFOVoption){
+        switch((int)atomic_load(&pData->HFOVoption)){
             default:
             case HFOV_360: hfov = 360.0f; break;
         }
-        switch(pData->aspectRatioOption){
+        switch((int)atomic_load(&pData->aspectRatioOption)){
             default:
             case ASPECT_RATIO_2_1: aspectRatio = 2.0f; break;
         }

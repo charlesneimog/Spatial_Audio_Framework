@@ -268,7 +268,7 @@ void ambi_dec_initCodec
     /* calculate loudspeaker decoding matrices */
     for( d=0; d<NUM_DECODERS; d++){
         M_dec_tmp = malloc1d(nLoudspeakers * max_nSH * sizeof(float));
-        switch(pData->dec_method[d]){
+        switch(atomic_load(&pData->dec_method[d])){
             case DECODING_METHOD_SAD:
                 getLoudspeakerDecoderMtx((float*)loudpkrs_dirs_deg_local, nLoudspeakers, LOUDSPEAKER_DECODER_SAD, masterOrder, 0, M_dec_tmp);
                 break;
